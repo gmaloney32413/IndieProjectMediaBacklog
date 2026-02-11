@@ -1,0 +1,11 @@
+Key Screens
+
+Login / Registration Screen – username, email, password, login/register buttons
+
+Dashboard – summary counts, filter options, search bar
+
+Backlog List – sortable table/list of movies/TV shows, status, rating, notes
+
+Add/Edit Backlog Entry – select media item, assign status, add notes, rating
+
+Media Search Results – integration with TMDB API for searching and selecting items
