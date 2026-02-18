@@ -9,7 +9,7 @@
 </head>
 <body>
 <header>
-    <%@ include file="includes/navbar.jsp" %>
+    <c:import url="includes/navbar.jsp"/>
 </header>
 <main>
     <h1>Dashboard</h1>

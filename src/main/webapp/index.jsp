@@ -10,7 +10,7 @@
 <body>
 <header>
     <h1>My Media Backlog</h1>
-    <%@ include file="includes/navbar.jsp"%>
+    <c:import url="includes/navbar.jsp"/>
 </header>
 <main>
     <section id="about">

@@ -37,3 +37,9 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+# ------------------------
+# Project-specific ignores
+# Log files
+logs/
+*.log

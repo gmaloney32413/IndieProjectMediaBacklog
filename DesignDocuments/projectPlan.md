@@ -26,9 +26,6 @@ Work Completed
 - Project plan 
 - Weekly reflection
 
-User Stories Addressed
-All MVP user stories are defined and organized during this phase.
-
 Resources Identified
 - Entity list 
 - Required tables 
