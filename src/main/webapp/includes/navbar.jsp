@@ -15,18 +15,19 @@
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="backlog">My Backlog</a>
+                    <a class="nav-link" href="backlog.jsp">My Backlog</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="search">Search</a>
+                    <a class="nav-link" href="dashboard.jsp">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a href="logout" class="nav-link">Logout</a>
                 </li>
             </ul>
 
             <span class="navbar-text me-3">
                 Welcome, ${sessionScope.username}
             </span>
-
-            <a href="logout" class="btn btn-outline-light btn-sm">Logout</a>
         </div>
     </div>
 </nav>
