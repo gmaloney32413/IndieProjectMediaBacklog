@@ -1,28 +1,27 @@
 package edu.matc.entjava.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * The type Media item.
  */
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "media_items")
 public abstract class  MediaItem {
     /**
      * The Id.
      */
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO, generator="native")
-    @GenericGenerator(name = "native",strategy = "native")
-    Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long tmdbId;
 
 
      // The Title.
-
     String title;
 
      //The Description.
@@ -56,7 +55,8 @@ public abstract class  MediaItem {
      * @param releaseDate the release date
      * @param posterUrl   the poster url
      */
-    public MediaItem(String title, String overview, String mediaType, Date releaseDate, String posterUrl) {
+    public MediaItem(Long tmdbId, String title, String overview, String mediaType, Date releaseDate, String posterUrl) {
+        this.tmdbId = tmdbId;
         this.title = title;
         this.overview = overview;
         this.mediaType = mediaType;
@@ -69,17 +69,17 @@ public abstract class  MediaItem {
      *
      * @return the id
      */
-    public Long getId() {
-        return id;
+    public Long getTmdbId() {
+        return tmdbId;
     }
 
     /**
      * Sets id.
      *
-     * @param id the id
+     * @param tmdbId the id
      */
-    public void setId(Long id) {
-        this.id = id;
+    public void setTmdbId(Long tmdbId) {
+        this.tmdbId = tmdbId;
     }
 
     /**
@@ -171,4 +171,5 @@ public abstract class  MediaItem {
     public void setPosterUrl(String posterUrl) {
         this.posterUrl = posterUrl;
     }
+
 }
