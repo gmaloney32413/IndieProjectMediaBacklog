@@ -18,7 +18,7 @@ public abstract class  MediaItem {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO, generator="native")
     @GenericGenerator(name = "native",strategy = "native")
-    String id;
+    Long id;
 
 
      // The Title.
@@ -39,6 +39,8 @@ public abstract class  MediaItem {
 
      // The Poster url.
     String posterUrl;
+
+
 
     /**
      * Instantiates a new Media item.

@@ -11,103 +11,182 @@ By the end of the project, I will deliver:
 -Unit tests using JUnit
 -Deployment to AWS
 -A professional portfolio-ready GitHub repository and demo video
+ 
+Week-by-Week Schedule
+Weeks 1–2 — Planning & Design
 
-📅 Week-by-Week Schedule
-Weeks 1–2 — Project Definition & Planning
+Focus:
+Define scope and structure before writing code.
 
-✔ Problem Statement
-✔ User Stories (MVP vs Stretch)
-✔ Screen Design & Application Flow
-✔ Project Plan (this document)
-✔ Weekly Reflection pushed to GitHub
+Work Completed
+- Problem statement
+- User stories (MVP vs Stretch)
+- Initial screen wireframes
+- Application flow design
+- Project plan 
+- Weekly reflection
 
-Tasks
+User Stories Addressed
+All MVP user stories are defined and organized during this phase.
 
-Finalize project scope (MVP vs Stretch)
-Define core entities and relationships
-Create basic screen wireframes (dashboard, backlog list, add media, login)
+Resources Identified
+- Entity list 
+- Required tables 
+- Required JSP pages 
+- Controller endpoints 
+- DAO classes
 
-Weeks 3–4 — Architecture & Database Design (Checkpoint 1 Due)
-Technical Focus
-Finalize data model
-Design database schema (tables & relationships)
-Database Design Tasks
-Define entities:
--User
--MediaItem (base class)
-    -Movie
-    -TvShow
--BacklogEntry
--Review/Note (optional in MVP)
+Weeks 3–4 — Data Model & Architecture (Checkpoint 1)
 
-Define relationships:
-User → BacklogEntries (One-to-Many)
-MediaItem → BacklogEntries (One-to-Many)
-MediaItem → Reviews (One-to-Many)
+Focus:
+Design the database structure and application architecture.
 
-Create:
-ER diagram (for GitHub)
+Entities Designed
+- User 
+- MediaItem (base class)
+  - Movie 
+  - TvShow 
+- BacklogEntry 
+- Review (optional MVP)
 
+Relationships
+- User → BacklogEntry (One-to-Many)
+- MediaItem → BacklogEntry (One-to-Many)
+- MediaItem → Review (One-to-Many)
+
+Deliverables
+- ER Diagram (uploaded to GitHub)
+- Database schema plan
+
+User Stories Supported
+- US-4 Add to Backlog 
+- US-6 Update Status 
+- US-9 Add Notes 
+- US-10 Rate Media 
+- US-11 Store Date Added 
+- US-12 Store Date Completed
 
 Weeks 5–6 — Persistence Layer (DAO + Hibernate)
-Goal: Meet Checkpoint 2 requirements
 
-Tasks:
-Configure Hibernate & JPA
-Create database (MySQL, PostgreSQL, or AWS RDS)
-Implement at least one DAO with full CRUD:
-    -BacklogEntryDAO (Create, Read, Update, Delete)
-Implement Log4J (replace all System.out.println)
-Write JUnit tests for DAO:
-    -createBacklogEntry()
-    -getBacklogEntryById()
-    -updateBacklogEntry()
-    -deleteBacklogEntry()
+Focus:
+Implement database connectivity and CRUD operations.
 
-Deliverable by end of Week 7:
-Working database
-Working DAO with tests
-Log4J logging in persistence layer
+Components
+Tables
+- user 
+- media_item 
+- backlog_entry 
+- review
 
-Weeks 7–8 — Web Layer + API Integration
-TMDB API Integration (MVP)
+Entities
+- User 
+- MediaItem 
+- Movie 
+- TvShow 
+- BacklogEntry
 
-Tasks:
--Register for TMDB API key
--Create Java service to:
-    -Search movies
-    -Search TV shows
-    -Retrieve details by TMDB ID
--Store only necessary metadata in database:
-    -Title
-    -Overview
-    -Release date
-    -Poster URL
-    -TMDB ID
+DAO Classes
+- BacklogEntryDAO
+- MediaItemDAO (if needed)
+- UserDAO (if required)
 
-Web Application (JSP/Servlet or MVC framework)
--Create basic pages:
--Login page (Cognito)
--Dashboard (counts by status)
--Backlog list page
--Add media page (search TMDB + add to backlog)
--Edit backlog entry page (status, rating, notes)
+Unit Tests 
+- createBacklogEntry()
+- getBacklogEntryById()
+- updateBacklogEntry()
+- deleteBacklogEntry()
 
-Week 9 — Authentication + Deployment (Checkpoint 3)
-AWS Cognito Authentication
--Configure Cognito user pool
--Integrate login/logout with your Java web app
--Ensure each user only sees their own backlog
+Logging
+-Log4J configured 
+Replace all System.out.println
+
+User Stories Completed
+- US-5 Add to Backlog
+- US-7 Remove from Backlog 
+- US-8 View Backlog 
+- US-6 Update Status 
+- US-9 Add Notes 
+- US-10 Rate Media
+
+Deliverable
+- Working database, DAO layer, and passing unit tests.
+
+Weeks 7–8 — Web Layer + TMDB API Integration
+
+Focus:
+Connect the backend to the frontend and integrate external API data.
+
+TMDB API Integration
+Service Class 
+- TMDBService.java
+
+Functions
+- Search movies
+- Search TV shows 
+- Retrieve media details by TMDB ID 
+
+Stored Metadata 
+- Title 
+- Overview 
+- Release date 
+- Poster URL 
+- TMDB ID
+
+User Stories Completed
+- US-4 Search Media
+- US-5 Add to Backlog
+
+Web Layer (JSP + Controllers)
+JSP Pages
+- login.jsp 
+- dashboard.jsp 
+- backlog.jsp 
+- search.jsp 
+- editBacklog.jsp
+
+Controllers
+- LoginController
+- DashboardController
+- BacklogController
+- SearchController
+
+User Stories Completed
+- US-14 View Dashboard Summary 
+- US-15 Filter Backlog 
+- US-16 Responsive Interface
+
+Week 9 — Authentication & Deployment (Checkpoint 3)
+AWS Cognito Integration
+
+Configuration 
+- Create Cognito User Pool 
+- Configure authentication flow 
+- Restrict backlog visibility by user ID
+
+User Stories Completed
+- US-1 Register Account 
+- US-2 Login 
+- US-3 Session Persistence
 
 AWS Deployment
-Deploy application to:
--AWS EC2
+Deployment Target
+- AWS EC2
 
-Verify:
--App is publicly accessible
--Login works
--Backlog data persists
--JSP displays data from database
+Verification Checklist
+- Application publicly accessible 
+- Authentication working 
+- Backlog data persists 
+- JSP pages correctly display database content
 
-Submit:
-Link to deployed application
+Stretch Goals (If Time Allows)
+- US-17 Add Video Games (RAWG API)
+- US-18 Track Episode Progress 
+- US-19 Media Recommendations 
+- US-20 Completion Trend Charts
+- US-21 Social Sharing
+
+These will require
+- Additional API service layer
+- Additional fields in MediaItem
+- Possible analytics service layer
+- Chart library integration
