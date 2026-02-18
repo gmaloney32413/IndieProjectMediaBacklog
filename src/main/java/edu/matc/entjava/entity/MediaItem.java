@@ -69,7 +69,7 @@ public abstract class  MediaItem {
      *
      * @return the id
      */
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
@@ -78,7 +78,7 @@ public abstract class  MediaItem {
      *
      * @param id the id
      */
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

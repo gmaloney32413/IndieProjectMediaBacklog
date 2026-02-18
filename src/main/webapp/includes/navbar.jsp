@@ -20,14 +20,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="dashboard.jsp">Dashboard</a>
                 </li>
-                <li class="nav-item">
-                    <a href="logout" class="nav-link">Logout</a>
-                </li>
             </ul>
-
-            <span class="navbar-text me-3">
-                Welcome, ${sessionScope.username}
-            </span>
         </div>
     </div>
 </nav>
