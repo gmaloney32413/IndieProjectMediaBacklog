@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,10 +9,7 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-<header>
-    <h1>My Media Backlog</h1>
-    <c:import url="includes/navbar.jsp"/>
-</header>
+<c:import url="/includes/header.jsp"/>
 <main>
     <section id="about">
         <h2>Welcome to My Media Backlog</h2>
@@ -24,9 +22,6 @@
     </section>
     <a href="login.jsp">login</a>
 </main>
-
-<footer>
-    <p>© 2026 My Media Backlog</p>
-</footer>
+<c:import url="/includes/footer.jsp"/>
 </body>
 </html>

@@ -62,7 +62,6 @@
         </table>
     </section>
 </main>
-
-<script src="dashboard.jsp"></script>
+<c:import url="/includes/footer.jsp"/>
 </body>
 </html>

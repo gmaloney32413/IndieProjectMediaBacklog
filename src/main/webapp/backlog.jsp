@@ -33,7 +33,6 @@
         </tbody>
     </table>
 </main>
-
-<script src="backlog.js"></script>
+<c:import url="/includes/footer.jsp"/>
 </body>
 </html>
