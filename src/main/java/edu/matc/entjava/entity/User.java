@@ -4,8 +4,13 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
+@Entity
+@Table(name = "users")
 public class User {
-    int userId;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long userId;
     String email;
     String password;
 
@@ -16,17 +21,17 @@ public class User {
     public User(){}
 
 
-    public User(int id, String email, String password) {
+    public User(Long id, String email, String password) {
         this.userId = id;
         this.email = email;
         this.password = password;
     }
 
-    public int getId() {
+    public Long getId() {
         return userId;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.userId = id;
     }
 

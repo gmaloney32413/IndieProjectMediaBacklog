@@ -14,13 +14,8 @@ public class TvShow extends MediaItem{
 
     public TvShow() {}
 
-    public TvShow(Long tmdbId, String title, String overview, String mediaType, Date releaseDate, String posterUr, Integer numberOfSeasons, Integer totalEpisodes, Boolean ongoing) {
-        this.tmdbId = tmdbId;
-        this.title = title;
-        this.overview = overview;
-        this.mediaType = mediaType;
-        this.releaseDate = releaseDate;
-        this.posterUrl = posterUr;
+    public TvShow(Long tmdbId, String title, String overview, String mediaType, Date releaseDate, String posterUrl, Integer numberOfSeasons, Integer totalEpisodes, Boolean ongoing) {
+        super(tmdbId, title, overview, mediaType, releaseDate, posterUrl);
         this.numberOfSeasons = numberOfSeasons;
         this.totalEpisodes = totalEpisodes;
         this.ongoing = ongoing;

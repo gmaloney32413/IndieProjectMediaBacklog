@@ -15,12 +15,7 @@ public class Movie extends MediaItem{
 
 
     public Movie(Long tmdbId, String title, String overview, String mediaType, Date releaseDate, String posterUrl, Integer runtime, String director, String rating) {
-        this.tmdbId = tmdbId;
-        this.title = title;
-        this.overview = overview;
-        this.mediaType = mediaType;
-        this.releaseDate = releaseDate;
-        this.posterUrl = posterUrl;
+        super(tmdbId, title, overview, mediaType, releaseDate, posterUrl);
         this.runtime = runtime;
         this.director = director;
         this.rating = rating;

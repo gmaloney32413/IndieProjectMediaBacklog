@@ -13,32 +13,46 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "media_items")
 public abstract class  MediaItem {
-    /**
-     * The Id.
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long tmdbId;
+    private Long id;   // DB primary key
+
+    @Column(name = "tmdb_id", nullable = false)
+    private Long tmdbId;  // TMDB id
 
 
-     // The Title.
+    /**
+     * The Title.
+     */
+// The Title.
     String title;
 
-     //The Description.
+    /**
+     * The Overview.
+     */
+//The Description.
     @Column()
     String overview;
 
 
-     // The Media type.
+    /**
+     * The Media type.
+     */
+// The Media type.
     String mediaType;
 
-    //The Release date.
+    /**
+     * The Release date.
+     */
+//The Release date.
     Date releaseDate;
 
 
-     // The Poster url.
+    /**
+     * The Poster url.
+     */
+// The Poster url.
     String posterUrl;
-
 
 
     /**
@@ -49,8 +63,9 @@ public abstract class  MediaItem {
     /**
      * Instantiates a new Media item.
      *
+     * @param tmdbId      the tmdb id
      * @param title       the title
-     * @param overview the description
+     * @param overview    the description
      * @param mediaType   the media type
      * @param releaseDate the release date
      * @param posterUrl   the poster url
@@ -62,6 +77,24 @@ public abstract class  MediaItem {
         this.mediaType = mediaType;
         this.releaseDate = releaseDate;
         this.posterUrl = posterUrl;
+    }
+
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * Sets id.
+     *
+     * @param id the id
+     */
+    public void setId(Long id) {
+        this.id = id;
     }
 
     /**
