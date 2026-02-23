@@ -1,0 +1,66 @@
+-- =============================
+-- Users
+-- =============================
+INSERT INTO users (email, password) VALUES
+('alice@example.com', 'password123'),
+('bob@example.com', 'securepass'),
+('charlie@example.com', 'charlie2026');
+
+-- =============================
+-- Media Items
+-- =============================
+INSERT INTO media_items (tmdb_id, title, overview, media_type, release_date, poster_url) VALUES
+-- Movies
+(101, 'Inception', 'A thief steals corporate secrets through dream-sharing technology.', 'movie', '2010-07-16', 'https://image.tmdb.org/t/p/original/inception.jpg'),
+(102, 'The Matrix', 'A computer hacker learns about the true nature of reality.', 'movie', '1999-03-31', 'https://image.tmdb.org/t/p/original/matrix.jpg'),
+(103, 'Interstellar', 'A team of explorers travel through a wormhole in space.', 'movie', '2014-11-07', 'https://image.tmdb.org/t/p/original/interstellar.jpg'),
+
+-- TV Shows
+(201, 'Stranger Things', 'Kids uncover supernatural mysteries in their small town.', 'tv_show', '2016-07-15', 'https://image.tmdb.org/t/p/original/strangerthings.jpg'),
+(202, 'Breaking Bad', 'A chemistry teacher turns to making meth.', 'tv_show', '2008-01-20', 'https://image.tmdb.org/t/p/original/breakingbad.jpg'),
+
+-- Videogames
+(301, 'The Legend of Zelda: Breath of the Wild', 'Open-world action-adventure game.', 'videogame', '2017-03-03', 'https://image.tmdb.org/t/p/original/zelda.jpg'),
+(302, 'God of War', 'Kratos and his son embark on a journey through Norse mythology.', 'videogame', '2018-04-20', 'https://image.tmdb.org/t/p/original/godofwar.jpg'),
+(303, 'Minecraft', 'Sandbox building and survival game.', 'videogame', '2011-11-18', 'https://image.tmdb.org/t/p/original/minecraft.jpg');
+
+-- =============================
+-- Movies Subclass
+-- =============================
+INSERT INTO movies (id, runtime, director, rating) VALUES
+(1, 148, 'Christopher Nolan', 'PG-13'),
+(2, 136, 'The Wachowskis', 'R'),
+(3, 169, 'Christopher Nolan', 'PG-13');
+
+-- =============================
+-- TV Shows Subclass
+-- =============================
+INSERT INTO tv_shows (id, number_of_seasons, total_episodes, ongoing) VALUES
+(4, 4, 34, TRUE),
+(5, 5, 62, FALSE);
+
+-- =============================
+-- Videogames Subclass
+-- =============================
+INSERT INTO videogames (id, platform, developer, publisher, esrb_rating) VALUES
+(6, 'Nintendo Switch', 'Nintendo EPD', 'Nintendo', 'E10+'),
+(7, 'PlayStation 4', 'SIE Santa Monica Studio', 'Sony', 'M'),
+(8, 'Multiple Platforms', 'Mojang Studios', 'Mojang/Microsoft', 'E10+');
+
+-- =============================
+-- Backlog Entries
+-- =============================
+INSERT INTO backlog_entries (user_id, media_id, status, notes, user_rating) VALUES
+-- Alice's entries
+(1, 1, 'Completed', 'Mind-bending movie!', 10),
+(1, 4, 'In Progress', 'Weekly watch with friends.', NULL),
+(1, 6, 'Planned', 'Want to play this over summer.', NULL),
+
+-- Bob's entries
+(2, 2, 'Completed', 'Loved the Matrix trilogy!', 9),
+(2, 5, 'Completed', 'Breaking Bad is a masterpiece.', 10),
+(2, 7, 'Planned', 'Excited to try God of War.', NULL),
+
+-- Charlie's entries
+(3, 3, 'In Progress', 'Interstellar is confusing but amazing.', 8),
+(3, 8, 'In Progress', 'Playing Minecraft with friends.', NULL);
