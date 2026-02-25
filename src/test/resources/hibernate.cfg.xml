@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <property name="connection.url">jdbc:mysql://awseb-e-qfcpismpa2-stack-awsebrdsdatabase-1kf5ycig5cpi.chucmcw44gk4.us-east-2.rds.amazonaws.com:3306/mediabacklog</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/MediaBacklog</property>
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
 
         <property name="connection.username">root</property>
