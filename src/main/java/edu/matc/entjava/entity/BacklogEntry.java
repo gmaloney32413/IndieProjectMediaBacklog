@@ -24,20 +24,24 @@ public class BacklogEntry {
     private MediaItem mediaItem;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private BacklogStatus status;
 
-    @Column(length = 2000)
+    @Column(length = 2000, name = "notes")
     private String notes;
 
+    @Column(name = "user_rating")
     private Integer userRating;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "date_added")
     private Date dateAdded;
 
     /**
      * Instantiates a new Backlog entry.
      */
     public BacklogEntry() {}
+
 
     // getters and setters
 

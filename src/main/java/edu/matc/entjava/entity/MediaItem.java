@@ -17,41 +17,39 @@ public abstract class  MediaItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;   // DB primary key
 
-    @Column(name = "tmdb_id", nullable = false)
+    @Column(name = "tmdb_id")
     private Long tmdbId;  // TMDB id
-
 
     /**
      * The Title.
      */
-// The Title.
+    @Column(name = "title")
     String title;
 
     /**
      * The Overview.
      */
-//The Description.
-    @Column()
+    @Column(name = "overview")
     String overview;
 
 
     /**
      * The Media type.
      */
-// The Media type.
+    @Column(name = "media_type")
     String mediaType;
 
     /**
      * The Release date.
      */
-//The Release date.
+    @Column(name = "release_date")
     Date releaseDate;
 
 
     /**
      * The Poster url.
      */
-// The Poster url.
+    @Column(name = "poster_url")
     String posterUrl;
 
 

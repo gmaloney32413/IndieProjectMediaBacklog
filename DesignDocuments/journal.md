@@ -12,7 +12,15 @@ Indie Project:
 
 Week 5
 
-Indie Project:
-- Implemented some DAO classes and entity methods: 1 hours
-- Continued web layer planning / linking JSPs to controllers: 
-- Updated project documentation: 2 hours
+Indie Project: 4 hours
+- Implemented some DAO classes and entity methods: 
+- Updated project documentation: 
+- created test classes
+
+Week 6 
+
+Indie Project: 2 hours
+- created database diagram
+- worked on dao classes
+- created search.jsp
+- created backlog and search servlets

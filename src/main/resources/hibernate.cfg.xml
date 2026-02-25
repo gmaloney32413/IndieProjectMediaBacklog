@@ -1,6 +1,3 @@
-f<!--TODO update this file for your environment -->
-<!--TODO add the mapping class element/s -->
-
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-configuration PUBLIC
         "-//Hibernate/Hibernate Configuration DTD//EN"
@@ -19,11 +16,11 @@ f<!--TODO update this file for your environment -->
         <property name="hibernate.c3p0.max_statements">50</property>
         <property name="hibernate.c3p0.idle_test_period">3000</property>
 
-        <!--
-        <mapping class=""></mapping>
-        <mapping class=""></mapping>
-        <mapping class="edu.matc.entjava"></mapping>
-        -->
+        <mapping class="edu.matc.entjava.entity.TvShow"></mapping>
+        <mapping class="edu.matc.entjava.entity.User"></mapping>
+        <mapping class="edu.matc.entjava.entity.Movie"></mapping>
+        <mapping class="edu.matc.entjava.entity.BacklogEntry"></mapping>
+        <mapping class="edu.matc.entjava.entity.MediaItem"></mapping>
 
 
 

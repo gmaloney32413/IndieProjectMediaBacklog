@@ -30,6 +30,22 @@
         </thead>
         <tbody>
         <!-- Media items will populate here dynamically -->
+        <c:forEach var="entry" items="${backlogEntries}">
+            <tr>
+                <td>
+                    <c:if test="${not empty entry.mediaItem.posterUrl}">
+                        <img src="${entry.mediaItem.posterUrl}" alt="${entry.mediaItem.title}" >
+                    </c:if>
+                </td>
+                <td>${entry.mediaItem.title}</td>
+                <td>${entry.mediaItem.overview}</td>
+                <td>${entry.status}</td>
+                <td>${entry.notes}</td>
+                <td>
+                    <a href="editBacklog.jsp?id=${entry.id}">Edit</a>
+                </td>
+            </tr>
+        </c:forEach>
         </tbody>
     </table>
 </main>

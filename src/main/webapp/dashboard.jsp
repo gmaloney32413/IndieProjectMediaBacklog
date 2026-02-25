@@ -15,22 +15,6 @@
 <main>
     <h1>Dashboard</h1>
 
-    <!-- Search TMDB -->
-    <section id="search-section">
-        <h2>Search TMDB</h2>
-        <form id="tmdb-search-form">
-            <input type="text" id="search-query" placeholder="Enter movie or TV show" required>
-            <select id="search-type">
-                <option value="movie">Movie</option>
-                <option value="tv">TV Show</option>
-            </select>
-            <button type="submit">Search</button>
-        </form>
-        <div id="search-results">
-            <!-- TMDB search results will populate here -->
-        </div>
-    </section>
-
     <!-- Backlog Status Table -->
     <section id="backlog-status">
         <h2>Backlog Status</h2>
@@ -60,6 +44,22 @@
             </tr>
             </tbody>
         </table>
+    </section>
+
+    <!-- Search TMDB -->
+    <section id="search-section">
+        <h2>Search TMDB</h2>
+        <form id="tmdb-search-form">
+            <input type="text" id="search-query" placeholder="Enter movie or TV show" required>
+            <select id="search-type">
+                <option value="movie">Movie</option>
+                <option value="tv">TV Show</option>
+            </select>
+            <button type="submit">Search</button>
+        </form>
+        <div id="search-results">
+            <!-- TMDB search results will populate here -->
+        </div>
     </section>
 </main>
 <c:import url="/includes/footer.jsp"/>

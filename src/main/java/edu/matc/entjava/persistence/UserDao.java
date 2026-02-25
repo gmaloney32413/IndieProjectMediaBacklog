@@ -106,7 +106,6 @@ public class UserDao {
         List<User> users = session.createQuery(criteria).getResultList();
 
         logger.debug("List of users retrieved: {}", users);
-
         session.close();
         return users;
     }

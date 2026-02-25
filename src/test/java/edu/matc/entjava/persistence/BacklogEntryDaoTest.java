@@ -6,27 +6,28 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class UserDaoTest {
-    UserDao dao;
+class BacklogEntryDaoTest {
+    BacklogEntryDao dao;
 
     @BeforeEach
     void setUp() {
         Database database = Database.getInstance();
         database.runSQL("cleandb.sql");
 
-        dao = new UserDao();
+        dao = new BacklogEntryDao();
     }
 
     @Test
     void getById() {
-    }
 
-    @Test
-    void update() {
     }
 
     @Test
     void insert() {
+    }
+
+    @Test
+    void update() {
     }
 
     @Test
@@ -35,5 +36,14 @@ class UserDaoTest {
 
     @Test
     void getAll() {
+
+    }
+
+    @Test
+    void getByUserId() {
+    }
+
+    @Test
+    void countByStatusForUser() {
     }
 }

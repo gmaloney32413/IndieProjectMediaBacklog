@@ -6,15 +6,15 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class UserDaoTest {
-    UserDao dao;
+class MediaItemDaoTest {
+    MediaItemDao dao;
 
     @BeforeEach
     void setUp() {
         Database database = Database.getInstance();
         database.runSQL("cleandb.sql");
 
-        dao = new UserDao();
+        dao = new MediaItemDao();
     }
 
     @Test
@@ -22,11 +22,11 @@ class UserDaoTest {
     }
 
     @Test
-    void update() {
+    void insert() {
     }
 
     @Test
-    void insert() {
+    void update() {
     }
 
     @Test
