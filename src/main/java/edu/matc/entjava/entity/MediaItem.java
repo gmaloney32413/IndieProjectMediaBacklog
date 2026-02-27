@@ -11,6 +11,7 @@ import java.util.List;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "media_type", discriminatorType = DiscriminatorType.STRING)
 @Table(name = "media_items")
 public abstract class  MediaItem {
     @Id
@@ -35,9 +36,9 @@ public abstract class  MediaItem {
 
     /**
      * The Media type.
-     */
     @Column(name = "media_type")
     String mediaType;
+     */
 
     /**
      * The Release date.
@@ -64,15 +65,13 @@ public abstract class  MediaItem {
      * @param tmdbId      the tmdb id
      * @param title       the title
      * @param overview    the description
-     * @param mediaType   the media type
      * @param releaseDate the release date
      * @param posterUrl   the poster url
      */
-    public MediaItem(Long tmdbId, String title, String overview, String mediaType, Date releaseDate, String posterUrl) {
+    public MediaItem(Long tmdbId, String title, String overview, Date releaseDate, String posterUrl) {
         this.tmdbId = tmdbId;
         this.title = title;
         this.overview = overview;
-        this.mediaType = mediaType;
         this.releaseDate = releaseDate;
         this.posterUrl = posterUrl;
     }
@@ -153,19 +152,21 @@ public abstract class  MediaItem {
      * Gets media type.
      *
      * @return the media type
-     */
+
     public String getMediaType() {
         return mediaType;
     }
+    */
 
     /**
      * Sets media type.
      *
      * @param mediaType the media type
-     */
+
     public void setMediaType(String mediaType) {
         this.mediaType = mediaType;
     }
+    */
 
     /**
      * Gets release date.

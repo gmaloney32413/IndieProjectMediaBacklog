@@ -24,3 +24,4 @@ Indie Project: 2 hours
 - worked on dao classes
 - created search.jsp
 - created backlog and search servlets
+- aws setup

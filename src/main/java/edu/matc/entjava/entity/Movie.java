@@ -6,16 +6,24 @@ import java.util.Date;
 
 @Entity
 @Table(name = "movies")
+@DiscriminatorValue("movie")
+@PrimaryKeyJoinColumn(name = "id")
 public class Movie extends MediaItem{
+
+    @Column(name = "runtime")
     private Integer runtime;
+
+    @Column(name = "director")
     private String director;
+
+    @Column(name = "rating")
     private String rating;
 
     public Movie() {}
 
 
-    public Movie(Long tmdbId, String title, String overview, String mediaType, Date releaseDate, String posterUrl, Integer runtime, String director, String rating) {
-        super(tmdbId, title, overview, mediaType, releaseDate, posterUrl);
+    public Movie(Long tmdbId, String title, String overview, Date releaseDate, String posterUrl, Integer runtime, String director, String rating) {
+        super(tmdbId, title, overview, releaseDate, posterUrl);
         this.runtime = runtime;
         this.director = director;
         this.rating = rating;

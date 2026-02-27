@@ -17,6 +17,8 @@
 <main>
     <h1>My Media Backlog</h1>
 
+    <p>BacklogEntries size: ${backlogEntries.size()}</p>
+
     <table border="1" id="backlog-table">
         <thead>
         <tr>

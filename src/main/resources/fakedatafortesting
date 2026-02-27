@@ -1,3 +1,19 @@
+SET FOREIGN_KEY_CHECKS = 0;
+
+TRUNCATE TABLE backlog_entries;
+TRUNCATE TABLE movies;
+TRUNCATE TABLE tv_shows;
+TRUNCATE TABLE media_items;
+TRUNCATE TABLE users;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- Reset auto-increment counters (optional, MySQL specific)
+ALTER TABLE users AUTO_INCREMENT = 1;
+ALTER TABLE media_items AUTO_INCREMENT = 1;
+ALTER TABLE movies AUTO_INCREMENT = 1;
+ALTER TABLE tv_shows AUTO_INCREMENT = 1;
+
 -- =============================
 -- Users
 -- =============================
@@ -19,10 +35,9 @@ INSERT INTO media_items (tmdb_id, title, overview, media_type, release_date, pos
 (201, 'Stranger Things', 'Kids uncover supernatural mysteries in their small town.', 'tv_show', '2016-07-15', 'https://image.tmdb.org/t/p/original/strangerthings.jpg'),
 (202, 'Breaking Bad', 'A chemistry teacher turns to making meth.', 'tv_show', '2008-01-20', 'https://image.tmdb.org/t/p/original/breakingbad.jpg'),
 
--- Videogames
-(301, 'The Legend of Zelda: Breath of the Wild', 'Open-world action-adventure game.', 'videogame', '2017-03-03', 'https://image.tmdb.org/t/p/original/zelda.jpg'),
-(302, 'God of War', 'Kratos and his son embark on a journey through Norse mythology.', 'videogame', '2018-04-20', 'https://image.tmdb.org/t/p/original/godofwar.jpg'),
-(303, 'Minecraft', 'Sandbox building and survival game.', 'videogame', '2011-11-18', 'https://image.tmdb.org/t/p/original/minecraft.jpg');
+-- Extra Movie to replace videogames
+(104, 'The Godfather', 'The aging patriarch of an organized crime dynasty transfers control to his son.', 'movie', '1972-03-24', 'https://image.tmdb.org/t/p/original/godfather.jpg'),
+(105, 'The Office (TV)', 'A mockumentary on a group of typical office workers.', 'tv_show', '2005-03-24', 'https://image.tmdb.org/t/p/original/theoffice.jpg');
 
 -- =============================
 -- Movies Subclass
@@ -30,37 +45,30 @@ INSERT INTO media_items (tmdb_id, title, overview, media_type, release_date, pos
 INSERT INTO movies (id, runtime, director, rating) VALUES
 (1, 148, 'Christopher Nolan', 'PG-13'),
 (2, 136, 'The Wachowskis', 'R'),
-(3, 169, 'Christopher Nolan', 'PG-13');
+(3, 169, 'Christopher Nolan', 'PG-13'),
+(6, 175, 'Francis Ford Coppola', 'R');  -- New Godfather entry
 
 -- =============================
 -- TV Shows Subclass
 -- =============================
 INSERT INTO tv_shows (id, number_of_seasons, total_episodes, ongoing) VALUES
 (4, 4, 34, TRUE),
-(5, 5, 62, FALSE);
-
--- =============================
--- Videogames Subclass
--- =============================
-INSERT INTO videogames (id, platform, developer, publisher, esrb_rating) VALUES
-(6, 'Nintendo Switch', 'Nintendo EPD', 'Nintendo', 'E10+'),
-(7, 'PlayStation 4', 'SIE Santa Monica Studio', 'Sony', 'M'),
-(8, 'Multiple Platforms', 'Mojang Studios', 'Mojang/Microsoft', 'E10+');
+(5, 5, 62, FALSE),
+(7, 9, 201, FALSE); -- New TV show entry (The Office)
 
 -- =============================
 -- Backlog Entries
 -- =============================
 INSERT INTO backlog_entries (user_id, media_id, status, notes, user_rating) VALUES
 -- Alice's entries
-(1, 1, 'Completed', 'Mind-bending movie!', 10),
-(1, 4, 'In Progress', 'Weekly watch with friends.', NULL),
-(1, 6, 'Planned', 'Want to play this over summer.', NULL),
+(1, 1, 'COMPLETED', 'Mind-bending movie!', 10),
+(1, 4, 'IN_PROGRESS', 'Weekly watch with friends.', NULL),
+(1, 6, 'PLANNED', 'Want to watch The Godfather.', NULL),
 
 -- Bob's entries
-(2, 2, 'Completed', 'Loved the Matrix trilogy!', 9),
-(2, 5, 'Completed', 'Breaking Bad is a masterpiece.', 10),
-(2, 7, 'Planned', 'Excited to try God of War.', NULL),
+(2, 2, 'COMPLETED', 'Loved the Matrix trilogy!', 9),
+(2, 5, 'COMPLETED', 'Breaking Bad is a masterpiece.', 10),
+(2, 7, 'PLANNED', 'Excited to binge The Office.', NULL),
 
 -- Charlie's entries
-(3, 3, 'In Progress', 'Interstellar is confusing but amazing.', 8),
-(3, 8, 'In Progress', 'Playing Minecraft with friends.', NULL);
+(3, 3, 'IN_PROGRESS', 'Interstellar is confusing but amazing.', 8);
