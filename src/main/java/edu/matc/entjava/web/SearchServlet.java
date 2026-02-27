@@ -36,6 +36,6 @@ public class SearchServlet extends HttpServlet {
         request.setAttribute("mediaItems", mediaItems);
 
         // Forward to search.jsp
-        request.getRequestDispatcher("/WEB-INF/jsp/search.jsp").forward(request, response);
+        request.getRequestDispatcher("/search.jsp").forward(request, response);
     }
 }

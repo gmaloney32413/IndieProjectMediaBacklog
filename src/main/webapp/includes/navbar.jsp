@@ -10,15 +10,15 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="index">Media Backlog</a>
+        <a class="navbar-brand" href="${pageContext.request.contextPath}/index">Media Backlog</a>
 
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="backlog">My Backlog</a>
+                    <a class="nav-link" href="${pageContext.request.contextPath}/backlog">My Backlog</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="dashboard">Dashboard</a>
+                    <a class="nav-link" href="${pageContext.request.contextPath}/dashboard">Dashboard</a>
                 </li>
             </ul>
         </div>

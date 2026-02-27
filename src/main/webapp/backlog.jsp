@@ -11,7 +11,7 @@
 <body>
 <header>
     <nav>
-        <c:import url="includes/navbar.jsp"/>
+        <c:import url="/includes/navbar.jsp"/>
     </nav>
 </header>
 <main>
