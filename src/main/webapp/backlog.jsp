@@ -27,6 +27,7 @@
             <th>Overview</th>
             <th>Status</th>
             <th>Notes</th>
+            <th>Personal Rating</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -43,8 +44,9 @@
                 <td>${entry.mediaItem.overview}</td>
                 <td>${entry.status}</td>
                 <td>${entry.notes}</td>
+                <td>${entry.userRating}</td>
                 <td>
-                    <a href="editBacklog.jsp?id=${entry.id}">Edit</a>
+                    <a href="editBacklog?id=${entry.id}">Edit</a>
                 </td>
             </tr>
         </c:forEach>

@@ -19,9 +19,9 @@ Indie Project: 4 hours
 
 Week 6 
 
-Indie Project: 2 hours
+Indie Project: 6 hours
 - created database diagram
 - worked on dao classes
 - created search.jsp
-- created backlog and search servlets
+- created backlog, search, index and dashboard servlets
 - aws setup

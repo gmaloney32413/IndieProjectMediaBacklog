@@ -97,6 +97,22 @@ public class BacklogEntryDao {
     }
 
     /**
+     * Get a BacklogEntry for a specific user and media item.
+     * Returns null if no entry exists.
+     */
+    public BacklogEntry getByUserAndMedia(Long userId, Long mediaId) {
+        Session session = sessionFactory.openSession();
+        BacklogEntry entry = session.createQuery(
+                        "FROM BacklogEntry b WHERE b.user.id = :userId AND b.mediaItem.id = :mediaId",
+                        BacklogEntry.class)
+                .setParameter("userId", userId)
+                .setParameter("mediaId", mediaId)
+                .uniqueResult();
+        session.close();
+        return entry;
+    }
+
+    /**
      * Count BacklogEntries by status for a specific user
      */
     public Long countByStatusForUser(BacklogStatus status, Long userId) {

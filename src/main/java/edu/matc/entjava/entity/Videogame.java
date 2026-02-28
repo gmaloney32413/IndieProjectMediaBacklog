@@ -42,6 +42,11 @@ public class Videogame extends MediaItem {
 
     // Getters and setters
 
+    @Override
+    public String getMediaType() {
+        return "TV Show";
+    }
+
     public String getPlatform() {
         return platform;
     }

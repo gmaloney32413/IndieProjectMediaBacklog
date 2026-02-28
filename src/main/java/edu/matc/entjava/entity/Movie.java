@@ -30,6 +30,11 @@ public class Movie extends MediaItem{
 
     }
 
+    @Override
+    public String getMediaType() {
+        return "Movie";
+    }
+
     public Integer getRuntime() {
         return runtime;
     }

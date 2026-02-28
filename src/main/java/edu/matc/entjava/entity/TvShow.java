@@ -28,6 +28,12 @@ public class TvShow extends MediaItem{
         this.ongoing = ongoing;
     }
 
+    @Override
+    public String getMediaType() {
+        return "TV Show";
+    }
+
+
     public void setNumberOfSeasons(Integer numberOfSeasons) {
         this.numberOfSeasons = numberOfSeasons;
     }

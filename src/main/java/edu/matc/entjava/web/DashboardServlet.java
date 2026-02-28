@@ -1,7 +1,9 @@
 package edu.matc.entjava.web;
 
 import edu.matc.entjava.entity.BacklogEntry;
+import edu.matc.entjava.entity.MediaItem;
 import edu.matc.entjava.persistence.BacklogEntryDao;
+import edu.matc.entjava.persistence.MediaItemDao;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,9 +15,17 @@ import java.util.List;
 
 @WebServlet("/dashboard")
 public class DashboardServlet extends HttpServlet {
+
+    private final MediaItemDao mediaItemDao = new MediaItemDao();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        List<MediaItem> mediaItems = mediaItemDao.getAll();
+
+        // Add the list to the request
+        request.setAttribute("mediaItems", mediaItems);
+
         request.getRequestDispatcher("/dashboard.jsp").forward(request, response);
     }
 }

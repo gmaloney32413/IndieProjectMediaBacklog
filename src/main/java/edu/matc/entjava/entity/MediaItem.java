@@ -158,6 +158,8 @@ public abstract class  MediaItem {
     }
     */
 
+    public abstract String getMediaType();
+
     /**
      * Sets media type.
      *

@@ -54,11 +54,42 @@
             <select id="search-type">
                 <option value="movie">Movie</option>
                 <option value="tv">TV Show</option>
+                <option value="any">Any</option>
             </select>
             <button type="submit">Search</button>
         </form>
         <div id="search-results">
-            <!-- TMDB search results will populate here -->
+            <table border="1" id="backlog-table">
+                <thead>
+                <tr>
+                    <th>Poster</th>
+                    <th>Title</th>
+                    <th>Overview</th>
+                    <th>Media type</th>
+                    <th>Release Date</th>
+                    <th>Add</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Media items will populate here dynamically -->
+                <c:forEach var="item" items="${mediaItems}">
+                    <tr>
+                        <td>
+                            <c:if test="${not empty entry.mediaItem.posterUrl}">
+                                <img src="${entry.mediaItem.posterUrl}" alt="${entry.mediaItem.title}" >
+                            </c:if>
+                        </td>
+                        <td>${item.title}</td>
+                        <td>${item.overview}</td>
+                        <td>${item.mediaType}</td>
+                        <td>${item.releaseDate}</td>
+                        <td>
+                            <a href="editBacklog?id=${item.id}">Add</a>
+                        </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
         </div>
     </section>
 </main>
