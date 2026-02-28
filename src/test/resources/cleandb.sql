@@ -1,0 +1,48 @@
+SET FOREIGN_KEY_CHECKS = 0;
+
+TRUNCATE TABLE backlog_entries;
+TRUNCATE TABLE movies;
+TRUNCATE TABLE tv_shows;
+TRUNCATE TABLE media_items;
+TRUNCATE TABLE users;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- Reset auto-increment counters (optional, MySQL specific)
+ALTER TABLE users AUTO_INCREMENT = 1;
+ALTER TABLE media_items AUTO_INCREMENT = 1;
+ALTER TABLE movies AUTO_INCREMENT = 1;
+ALTER TABLE tv_shows AUTO_INCREMENT = 1;
+
+
+INSERT INTO users (email, password) VALUES
+                                        ('alice@example.com', 'password123'),
+                                        ('bob@example.com', 'securepass'),
+                                        ('charlie@example.com', 'charlie2026');
+
+INSERT INTO media_items (tmdb_id, title, overview, media_type, release_date, poster_url) VALUES (101, 'Inception', 'A thief steals corporate secrets through dream-sharing technology.', 'movie', '2010-07-16', 'https://image.tmdb.org/t/p/original/inception.jpg'), (102, 'The Matrix', 'A computer hacker learns about the true nature of reality.', 'movie', '1999-03-31', 'https://image.tmdb.org/t/p/original/matrix.jpg'), (103, 'Interstellar', 'A team of explorers travel through a wormhole in space.', 'movie', '2014-11-07', 'https://image.tmdb.org/t/p/original/interstellar.jpg'), (201, 'Stranger Things', 'Kids uncover supernatural mysteries in their small town.', 'tv_show', '2016-07-15', 'https://image.tmdb.org/t/p/original/strangerthings.jpg'), (202, 'Breaking Bad', 'A chemistry teacher turns to making meth.', 'tv_show', '2008-01-20', 'https://image.tmdb.org/t/p/original/breakingbad.jpg'), (104, 'The Godfather', 'The aging patriarch of an organized crime dynasty transfers control to his son.', 'movie', '1972-03-24', 'https://image.tmdb.org/t/p/original/godfather.jpg'), (105, 'The Office (TV)', 'A mockumentary on a group of typical office workers.', 'tv_show', '2005-03-24', 'https://image.tmdb.org/t/p/original/theoffice.jpg');
+
+
+INSERT INTO movies (id, runtime, director, rating) VALUES (1, 148, 'Christopher Nolan', 'PG-13'), (2, 136, 'The Wachowskis', 'R'), (3, 169, 'Christopher Nolan', 'PG-13'), (6, 175, 'Francis Ford Coppola', 'R');  -- New Godfather entry
+
+-- =============================
+-- TV Shows Subclass
+-- =============================
+INSERT INTO tv_shows (id, number_of_seasons, total_episodes, ongoing) VALUES (4, 4, 34, TRUE), (5, 5, 62, FALSE), (7, 9, 201, FALSE); -- New TV show entry (The Office)
+
+-- =============================
+-- Backlog Entries
+-- =============================
+INSERT INTO backlog_entries (user_id, media_id, status, notes, user_rating) VALUES
+-- Alice's entries
+(1, 1, 'COMPLETED', 'Mind-bending movie!', 10),
+(1, 4, 'IN_PROGRESS', 'Weekly watch with friends.', NULL),
+(1, 6, 'PLANNED', 'Want to watch The Godfather.', NULL),
+
+-- Bob's entries
+(2, 2, 'COMPLETED', 'Loved the Matrix trilogy!', 9),
+(2, 5, 'COMPLETED', 'Breaking Bad is a masterpiece.', 10),
+(2, 7, 'PLANNED', 'Excited to binge The Office.', NULL),
+
+-- Charlie's entries
+(3, 3, 'IN_PROGRESS', 'Interstellar is confusing but amazing.', 8);

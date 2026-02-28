@@ -28,19 +28,19 @@
             <tbody>
             <tr>
                 <td>Planned</td>
-                <td id="planned-count">0</td>
+                <td id="planned-count">${plannedCount}</td>
             </tr>
             <tr>
                 <td>In Progress</td>
-                <td id="in-progress-count">0</td>
+                <td id="in-progress-count">${inProgressCount}</td>
             </tr>
             <tr>
                 <td>Completed</td>
-                <td id="completed-count">0</td>
+                <td id="completed-count">${completedCount}</td>
             </tr>
             <tr>
                 <td>Dropped</td>
-                <td id="dropped-count">0</td>
+                <td id="dropped-count">${droppedCount}</td>
             </tr>
             </tbody>
         </table>
