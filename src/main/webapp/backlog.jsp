@@ -46,7 +46,7 @@
                 <td>${entry.notes}</td>
                 <td>${entry.userRating}</td>
                 <td>
-                    <a href="editBacklog?id=${entry.id}">Edit</a>
+                    <a href="editBacklog?id=${entry.mediaItem.id}">Edit</a>
                 </td>
             </tr>
         </c:forEach>

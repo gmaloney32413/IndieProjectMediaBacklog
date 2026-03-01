@@ -37,9 +37,11 @@
 
     <form action="editBacklog" method="post">
 
+        <input type="hidden" name="mediaId" value="${backlogEntry.mediaItem.id}">
+
         <!-- Hidden ID only if editing -->
         <c:if test="${not empty backlogEntry}">
-            <input type="hidden" name="id" value="${backlogEntry.id}"/>
+            <input type="hidden" name="entryId" value="${backlogEntry.id}"/>
         </c:if>
 
         <div>
@@ -53,7 +55,7 @@
             <select id="status" name="status" required>
                 <c:forEach var="s" items="${backlogStatuses}">
                     <option value="${s}"
-                            <c:if test="${not empty backlogEntry && backlogEntry.status == s}">
+                            <c:if test="${not empty backlogEntry.id && backlogEntry.status == s}">
                                 selected
                             </c:if>>
                             ${s}
@@ -69,7 +71,7 @@
                    name="userRating"
                    min="1"
                    max="10"
-                   value="${not empty backlogEntry ? backlogEntry.userRating : ''}"/>
+                   value="${not empty backlogEntry.id ? backlogEntry.userRating : ''}"/>
         </div>
 
         <div>
@@ -77,7 +79,7 @@
             <textarea id="notes"
                       name="notes"
                       rows="5"
-                      cols="40">${not empty backlogEntry ? backlogEntry.notes : ''}</textarea>
+                      cols="40">${not empty backlogEntry.id ? backlogEntry.notes : ''}</textarea>
         </div>
 
         <div>
