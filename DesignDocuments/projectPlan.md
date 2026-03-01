@@ -3,14 +3,14 @@ Project Goals
 
 By the end of the project, I will deliver:
 
--A web-based media backlog application with authentication (AWS Cognito)
--A relational database using JPA/Hibernate with multiple one-to-many relationships
--At least one external API integration (TMDB for movies/TV shows)
--Full CRUD functionality for backlog entries
--Logging with Log4J (no System.out.println)
--Unit tests using JUnit
--Deployment to AWS
--A professional portfolio-ready GitHub repository and demo video
+- A web-based media backlog application with authentication (AWS Cognito)
+- A relational database using JPA/Hibernate with multiple one-to-many relationships
+- At least one external API integration (TMDB for movies/TV shows)
+- Full CRUD functionality for backlog entries
+- Logging with Log4J (no System.out.println)
+- Unit tests using JUnit
+- Deployment to AWS
+- A professional portfolio-ready GitHub repository and demo video
  
 Week-by-Week Schedule
 Weeks 1–2 — Planning & Design
@@ -19,12 +19,12 @@ Focus:
 Define scope and structure before writing code.
 
 Work Completed
-- Problem statement
-- User stories (MVP vs Stretch)
-- Initial screen wireframes
-- Application flow design
-- Project plan 
-- Weekly reflection
+- [X]Problem statement
+- [X]User stories (MVP vs Stretch)
+- [X]Initial screen wireframes
+- []Application flow design
+- [X]Project plan 
+- []Weekly reflection
 
 Resources Identified
 - Entity list 
@@ -39,29 +39,29 @@ Focus:
 Design the database structure and application architecture.
 
 Entities Designed
-- User 
-- MediaItem (base class)
-  - Movie 
-  - TvShow 
-- BacklogEntry 
-- Review (optional MVP)
+- [X]User 
+- [X]MediaItem (base class)
+  - [X]Movie 
+  - [X]TvShow 
+- [X]BacklogEntry 
+- []Review (optional MVP)
 
 Relationships
-- User → BacklogEntry (One-to-Many)
-- MediaItem → BacklogEntry (One-to-Many)
-- MediaItem → Review (One-to-Many)
+- [X]User → BacklogEntry (One-to-Many)
+- [X]MediaItem → BacklogEntry (One-to-Many)
+- [X]MediaItem → Review (One-to-Many)
 
 Deliverables
-- ER Diagram (uploaded to GitHub)
-- Database schema plan
+- [X]ER Diagram (uploaded to GitHub)
+- [X]Database schema plan
 
 User Stories Supported
-- US-4 Add to Backlog 
-- US-6 Update Status 
-- US-9 Add Notes 
-- US-10 Rate Media 
-- US-11 Store Date Added 
-- US-12 Store Date Completed
+- []US-4 Add to Backlog 
+- [X]US-6 Update Status 
+- []US-9 Add Notes 
+- [X]US-10 Rate Media 
+- []US-11 Store Date Added 
+- []US-12 Store Date Completed
 
 Weeks 5–6 — Persistence Layer (DAO + Hibernate)
 
@@ -70,40 +70,39 @@ Implement database connectivity and CRUD operations.
 
 Components
 Tables
-- user 
-- media_item 
-- backlog_entry 
-- review
+- [x]user 
+- [x]media_item 
+- [x]backlog_entry
 
 Entities
-- User 
-- MediaItem 
-- Movie 
-- TvShow 
-- BacklogEntry
+- [X]User 
+- [X]MediaItem 
+- [x]Movie 
+- [x]TvShow 
+- [x]BacklogEntry
 
 DAO Classes
-- BacklogEntryDAO
-- MediaItemDAO (if needed)
-- UserDAO (if required)
+- [x]BacklogEntryDAO
+- [x]MediaItemDAO (if needed)
+- [x]UserDAO (if required)
 
 Unit Tests 
-- createBacklogEntry()
-- getBacklogEntryById()
-- updateBacklogEntry()
-- deleteBacklogEntry()
+- [x]createBacklogEntry()
+- [x]getBacklogEntryById()
+- [x]updateBacklogEntry()
+- [x]deleteBacklogEntry()
 
 Logging
--Log4J configured 
-Replace all System.out.println
+- [x]Log4J configured 
+
 
 User Stories Completed
-- US-5 Add to Backlog
-- US-7 Remove from Backlog 
-- US-8 View Backlog 
-- US-6 Update Status 
-- US-9 Add Notes 
-- US-10 Rate Media
+- []US-5 Add to Backlog
+- []US-7 Remove from Backlog 
+- []US-8 View Backlog 
+- []US-6 Update Status 
+- []US-9 Add Notes 
+- []US-10 Rate Media
 
 Deliverable
 - Working database, DAO layer, and passing unit tests.
@@ -148,32 +147,32 @@ Controllers
 - SearchController
 
 User Stories Completed
-- US-14 View Dashboard Summary 
-- US-15 Filter Backlog 
+- []US-14 View Dashboard Summary 
+- []US-15 Filter Backlog 
 - US-16 Responsive Interface
 
 Week 9 — Authentication & Deployment (Checkpoint 3)
 AWS Cognito Integration
 
 Configuration 
-- Create Cognito User Pool 
-- Configure authentication flow 
-- Restrict backlog visibility by user ID
+- []Create Cognito User Pool 
+- []Configure authentication flow 
+- []Restrict backlog visibility by user ID
 
 User Stories Completed
-- US-1 Register Account 
-- US-2 Login 
-- US-3 Session Persistence
+- []US-1 Register Account 
+- []US-2 Login 
+- []US-3 Session Persistence
 
 AWS Deployment
 Deployment Target
 - AWS EC2
 
 Verification Checklist
-- Application publicly accessible 
-- Authentication working 
-- Backlog data persists 
-- JSP pages correctly display database content
+- []Application publicly accessible 
+- []Authentication working 
+- []Backlog data persists 
+- []JSP pages correctly display database content
 
 Stretch Goals (If Time Allows)
 - US-17 Add Video Games (RAWG API)
