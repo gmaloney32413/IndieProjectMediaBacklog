@@ -2,7 +2,7 @@ MVP (Minimum Viable Product)
 
 Authentication & Account Management
 
-US-1: Register Account
+-[] US-1: Register Account
 As a new user, I want to register using AWS Cognito so that my backlog is private and securely stored.
 
 US-2: Login
@@ -10,6 +10,9 @@ As a returning user, I want to log in securely so that I can access my personal 
 
 US-3: Session Persistence
 As an authenticated user, I want my session to persist while I am active so that I do not need to repeatedly enter my credentials.
+
+US : Logout
+As a logged-in user I want to log out of my account. So that my session ends and no one else can access my backlog from my device.
 
 Backlog Management
 
