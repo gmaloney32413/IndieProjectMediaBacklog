@@ -93,19 +93,18 @@
                     </c:otherwise>
                 </c:choose>
             </button>
-
-            <c:if test="${not empty backlogEntry}">
-                <!-- Delete button -->
-                <form action="deleteBacklog" method="post" style="display:inline;">
-                    <input type="hidden" name="id" value="${backlogEntry.id}" />
-                    <button type="submit" onclick="return confirm('Are you sure you want to delete this entry?');">
-                        Delete Entry
-                    </button>
-                </form>
-            </c:if>
         </div>
-
     </form>
+
+    <c:if test="${not empty backlogEntry.id}">
+        <!-- Delete button -->
+        <form action="deleteBacklog" method="post" style="display:inline;">
+            <input type="hidden" name="id" value="${backlogEntry.id}" />
+            <button type="submit" onclick="return confirm('Are you sure you want to delete this entry?');">
+                Delete Entry
+            </button>
+        </form>
+    </c:if>
 </main>
 
 <c:import url="/includes/footer.jsp"/>
