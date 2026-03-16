@@ -20,7 +20,7 @@
             Stay on top of your entertainment, all in one place!
         </p>
     </section>
-    <a href="login.jsp">login</a>
+    <a href="logIn">login</a>
 </main>
 <c:import url="/includes/footer.jsp"/>
 </body>
