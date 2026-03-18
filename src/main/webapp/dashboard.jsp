@@ -49,15 +49,16 @@
     <!-- Search TMDB -->
     <section id="search-section">
         <h2>Search TMDB</h2>
-        <form id="tmdb-search-form">
-            <input type="text" id="search-query" placeholder="Enter movie or TV show" required>
-            <select id="search-type">
-                <option value="movie">Movie</option>
-                <option value="tv">TV Show</option>
-                <option value="any">Any</option>
+        <form id="tmdb-search-form" method="get" action="dashboard">
+            <input type="text" id="search-query" name="searchQuery" value="${param.searchQuery}" placeholder="Enter movie or TV show">
+            <select id="search-type" name="searchType">
+                <option value="any" ${param.searchType eq 'any' ? 'selected' : ''}>Any</option>
+                <option value="movie" ${param.searchType eq 'movie' ? 'selected' : ''}>Movie</option>
+                <option value="tv" ${param.searchType eq 'tv' ? 'selected' : ''}>TV Show</option>
             </select>
             <button type="submit">Search</button>
         </form>
+
         <div id="search-results">
             <table border="1" id="backlog-table">
                 <thead>
@@ -75,8 +76,8 @@
                 <c:forEach var="item" items="${mediaItems}">
                     <tr>
                         <td>
-                            <c:if test="${not empty entry.mediaItem.posterUrl}">
-                                <img src="${entry.mediaItem.posterUrl}" alt="${entry.mediaItem.title}" >
+                            <c:if test="${not empty item.posterUrl}">
+                                <img src="${item.posterUrl}" alt="${item.title}" >
                             </c:if>
                         </td>
                         <td>${item.title}</td>
