@@ -89,4 +89,35 @@ class MediaItemDaoTest {
         MediaItem deleted = mediaItemDao.getById(7L);
         assertNull(deleted);
     }
+
+    @Test
+    void searchByTitleAndType_movieFilter() {
+        List<MediaItem> results = mediaItemDao.searchByTitleAndType("the", "movie");
+
+        assertFalse(results.isEmpty());
+
+        // Should include movies only
+        assertTrue(results.stream().anyMatch(item -> item.getTitle().equals("The Matrix")));
+        assertTrue(results.stream().anyMatch(item -> item.getTitle().equals("The Godfather")));
+
+        // Should NOT include TV show
+        assertFalse(results.stream().anyMatch(item -> item.getTitle().equals("The Office (TV)")));
+    }
+
+    @Test
+    void searchByTitleAndType_tvFilter() {
+        List<MediaItem> results = mediaItemDao.searchByTitleAndType("office", "tv");
+
+        assertEquals(1, results.size());
+        assertEquals("The Office (TV)", results.get(0).getTitle());
+    }
+
+    @Test
+    void searchByTitleAndType_anyType() {
+        List<MediaItem> results = mediaItemDao.searchByTitleAndType("the", "any");
+
+        // Should behave like searchByTitle
+        assertTrue(results.size() >= 3);
+    }
+
 }
