@@ -25,7 +25,7 @@ public class BacklogServlet extends HttpServlet {
         // TODO: Replace with actual logged-in user ID from session
         Long userId = (long)1;
 
-        HttpSession session = request.getSession(false);
+        //HttpSession session = request.getSession(false);
 
         /*
         // Redirect if not logged in
