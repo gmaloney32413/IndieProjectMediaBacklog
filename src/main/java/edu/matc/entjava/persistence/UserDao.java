@@ -109,4 +109,33 @@ public class UserDao {
         session.close();
         return users;
     }
+
+
+    public User getByCognitoSub(String cognitoSub) {
+        Session session = sessionFactory.openSession();
+
+        HibernateCriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<User> criteria = builder.createQuery(User.class);
+        Root<User> root = criteria.from(User.class);
+
+        criteria.select(root)
+                .where(builder.equal(root.get("cognitoSub"), cognitoSub));
+
+        User user = session.createQuery(criteria).uniqueResult();
+
+        session.close();
+        return user;
+    }
+
+
+    public User getOrCreateUser(String cognitoSub, String email, String username, String name) {
+        User user = getByCognitoSub(cognitoSub);
+
+        if (user == null) {
+            user = new User(null, cognitoSub, email, username, name);
+            insert(user);
+        }
+
+        return user;
+    }
 }

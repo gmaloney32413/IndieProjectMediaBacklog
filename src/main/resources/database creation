@@ -1,8 +1,10 @@
 -- Table: users
 CREATE TABLE users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    cognito_sub VARCHAR(255) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL
+    username VARCHAR(100),
+    name VARCHAR(255)
 );
 
 -- Table: media_items

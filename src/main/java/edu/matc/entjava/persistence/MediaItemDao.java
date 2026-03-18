@@ -61,7 +61,7 @@ public class MediaItemDao {
         Root<MediaItem> root = query.from(MediaItem.class);
         List<MediaItem> items = session.createSelectionQuery( query ).getResultList();
 
-        logger.debug("The list of books " + items);
+        logger.debug("The list of media items " + items);
         session.close();
         return items;
     }

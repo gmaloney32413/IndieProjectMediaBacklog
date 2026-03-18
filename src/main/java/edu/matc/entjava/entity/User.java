@@ -1,7 +1,6 @@
 package edu.matc.entjava.entity;
 
 import jakarta.persistence.*;
-
 import java.util.List;
 
 @Entity
@@ -11,23 +10,31 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    Long userId;
-    @Column(name = "email")
-    String email;
-    @Column(name = "password")
-    String password;
+    private Long userId;
+
+    @Column(name = "cognito_sub", nullable = false, unique = true)
+    private String cognitoSub;
+
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
+
+    @Column(name = "username")
+    private String username;
+
+    @Column(name = "name")
+    private String name;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BacklogEntry> backlogEntries;
 
+    public User() {}
 
-    public User(){}
-
-
-    public User(Long id, String email, String password) {
+    public User(Long id, String cognitoSub, String email, String username, String name) {
         this.userId = id;
+        this.cognitoSub = cognitoSub;
         this.email = email;
-        this.password = password;
+        this.username = username;
+        this.name = name;
     }
 
     public Long getId() {
@@ -38,6 +45,14 @@ public class User {
         this.userId = id;
     }
 
+    public String getCognitoSub() {
+        return cognitoSub;
+    }
+
+    public void setCognitoSub(String cognitoSub) {
+        this.cognitoSub = cognitoSub;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -46,20 +61,20 @@ public class User {
         this.email = email;
     }
 
-    /**
-     *  gets user's password
-     * @return password
-     */
-    public String getPassword() {
-        return password;
+    public String getUsername() {
+        return username;
     }
 
-    /**
-     *
-     * @param password
-     */
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<BacklogEntry> getBacklogEntries() {
@@ -69,5 +84,4 @@ public class User {
     public void setBacklogEntries(List<BacklogEntry> backlogEntries) {
         this.backlogEntries = backlogEntries;
     }
-
 }

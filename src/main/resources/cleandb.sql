@@ -15,10 +15,10 @@ ALTER TABLE movies AUTO_INCREMENT = 1;
 ALTER TABLE tv_shows AUTO_INCREMENT = 1;
 
 
-INSERT INTO users (email, password) VALUES
-                                        ('alice@example.com', 'password123'),
-                                        ('bob@example.com', 'securepass'),
-                                        ('charlie@example.com', 'charlie2026');
+INSERT INTO users (cognito_sub, email, username, name) VALUES
+                                                           ('11111111-1111-1111-1111-111111111111', 'alice@example.com', 'alice', 'Alice Johnson'),
+                                                           ('22222222-2222-2222-2222-222222222222', 'bob@example.com', 'bob', 'Bob Smith'),
+                                                           ('33333333-3333-3333-3333-333333333333', 'charlie@example.com', 'charlie', 'Charlie Brown');
 
 INSERT INTO media_items (tmdb_id, title, overview, media_type, release_date, poster_url) VALUES (101, 'Inception', 'A thief steals corporate secrets through dream-sharing technology.', 'movie', '2010-07-16', 'https://image.tmdb.org/t/p/original/inception.jpg'), (102, 'The Matrix', 'A computer hacker learns about the true nature of reality.', 'movie', '1999-03-31', 'https://image.tmdb.org/t/p/original/matrix.jpg'), (103, 'Interstellar', 'A team of explorers travel through a wormhole in space.', 'movie', '2014-11-07', 'https://image.tmdb.org/t/p/original/interstellar.jpg'), (201, 'Stranger Things', 'Kids uncover supernatural mysteries in their small town.', 'tv_show', '2016-07-15', 'https://image.tmdb.org/t/p/original/strangerthings.jpg'), (202, 'Breaking Bad', 'A chemistry teacher turns to making meth.', 'tv_show', '2008-01-20', 'https://image.tmdb.org/t/p/original/breakingbad.jpg'), (104, 'The Godfather', 'The aging patriarch of an organized crime dynasty transfers control to his son.', 'movie', '1972-03-24', 'https://image.tmdb.org/t/p/original/godfather.jpg'), (105, 'The Office (TV)', 'A mockumentary on a group of typical office workers.', 'tv_show', '2005-03-24', 'https://image.tmdb.org/t/p/original/theoffice.jpg');
 

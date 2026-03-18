@@ -7,6 +7,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.matc.entjava.auth.*;
+import edu.matc.entjava.entity.User;
+import edu.matc.entjava.persistence.UserDao;
 import edu.matc.entjava.utilities.PropertiesLoader;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -19,6 +21,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -95,6 +98,7 @@ public class Auth extends HttpServlet implements PropertiesLoader {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String authCode = req.getParameter("code");
+        logger.info("Auth code received: " + (authCode != null));
         String userName = null;
 
         if (authCode == null) {
@@ -105,9 +109,10 @@ public class Auth extends HttpServlet implements PropertiesLoader {
             return;
         } else {
             HttpRequest authRequest = buildAuthRequest(authCode);
+            logger.info("Calling Cognito token endpoint: " + OAUTH_URL);
             try {
                 TokenResponse tokenResponse = getToken(authRequest);
-                userName = validate(tokenResponse);
+                userName = validate(tokenResponse, req);
                 req.setAttribute("userName", userName);
             } catch (IOException e) {
                 logger.error("Error getting or validating the token: " + e.getMessage(), e);
@@ -162,7 +167,7 @@ public class Auth extends HttpServlet implements PropertiesLoader {
      * @return
      * @throws IOException
      */
-    private String validate(TokenResponse tokenResponse) throws IOException {
+    private String validate(TokenResponse tokenResponse, HttpServletRequest req) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         CognitoTokenHeader tokenHeader = mapper.readValue(CognitoJWTParser.getHeader(tokenResponse.getIdToken()).toString(), CognitoTokenHeader.class);
 
@@ -200,16 +205,27 @@ public class Auth extends HttpServlet implements PropertiesLoader {
 
         // Verify the token
         DecodedJWT jwt = verifier.verify(tokenResponse.getIdToken());
-        //String userName = jwt.getClaim("cognito:username").asString();
+
+        // Extract claims
+        String cognitoSub = jwt.getClaim("sub").asString(); // unique Cognito ID
         String email = jwt.getClaim("email").asString();
-        logger.debug("here's the username: " + email);
+        String username = jwt.getClaim("cognito:username").asString(); // optional
+        String name = jwt.getClaim("name").asString(); // optional
 
-        logger.debug("here are all the available claims: " + jwt.getClaims());
+        // Get or create user in the database
+        UserDao userDao = new UserDao();
+        User user = userDao.getOrCreateUser(cognitoSub, email, username, name);
 
-        // TODO decide what you want to do with the info!
-        // for now, I'm just returning username for display back to the browser
+        // Store user in session
+        HttpSession session = req.getSession(true);
+        session.setAttribute("user", user);
 
-        return email;
+        logger.debug("User logged in: " + user.getEmail() + ", CognitoSub: " + cognitoSub);
+
+        // Optional: store cognitoSub for JSPs
+        req.setAttribute("cognitoSub", cognitoSub);
+
+        return username;
     }
 
     /** Create the auth url and use it to build the request.

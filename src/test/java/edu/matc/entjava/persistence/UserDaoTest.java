@@ -26,7 +26,9 @@ class UserDaoTest {
 
         assertNotNull(user);
         assertEquals("alice@example.com", user.getEmail());
-        assertEquals("password123", user.getPassword());
+        assertEquals("11111111-1111-1111-1111-111111111111", user.getCognitoSub());
+        assertEquals("alice", user.getUsername());
+        assertEquals("Alice Johnson", user.getName());
     }
 
     @Test
@@ -43,7 +45,13 @@ class UserDaoTest {
 
     @Test
     void insert() {
-        User newUser = new User(null, "newuser@test.com", "testpass");
+        User newUser = new User(
+                null,
+                "44444444-4444-4444-4444-444444444444",
+                "newuser@test.com",
+                "newuser",
+                "New User"
+        );
 
         Long id = dao.insert(newUser);
 
@@ -52,7 +60,9 @@ class UserDaoTest {
         User insertedUser = dao.getById(id.intValue());
 
         assertEquals("newuser@test.com", insertedUser.getEmail());
-        assertEquals("testpass", insertedUser.getPassword());
+        assertEquals("44444444-4444-4444-4444-444444444444", insertedUser.getCognitoSub());
+        assertEquals("newuser", insertedUser.getUsername());
+        assertEquals("New User", insertedUser.getName());
     }
 
     @Test
@@ -71,5 +81,14 @@ class UserDaoTest {
         List<User> users = dao.getAll();
 
         assertEquals(3, users.size());
+    }
+
+    @Test
+    void getByCognitoSub() {
+        User user = dao.getByCognitoSub("11111111-1111-1111-1111-111111111111");
+
+        assertNotNull(user);
+        assertEquals("alice@example.com", user.getEmail());
+        assertEquals("alice", user.getUsername());
     }
 }
