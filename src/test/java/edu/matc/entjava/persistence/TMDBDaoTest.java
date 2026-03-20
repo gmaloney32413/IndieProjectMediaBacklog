@@ -9,15 +9,27 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * The type Tmdb dao test.
+ */
 class TMDBDaoTest {
 
+    /**
+     * The Dao.
+     */
     TMDBDao dao;
 
+    /**
+     * Sets up.
+     */
     @BeforeEach
     void setUp() {
         dao = new TMDBDao();
     }
 
+    /**
+     * Gets page success.
+     */
     @Test
     void getPageSuccess() {
         MediaPage page = dao.getPage();
@@ -41,6 +53,9 @@ class TMDBDaoTest {
         assertEquals("Peaky Blinders: The Immortal Man", firstItem.getTitle());
     }
 
+    /**
+     * Gets movie page success.
+     */
     @Test
     void getMoviePageSuccess() {
         MediaPage page = dao.getMoviePage();
@@ -59,6 +74,9 @@ class TMDBDaoTest {
 
     }
 
+    /**
+     * Gets tv page success.
+     */
     @Test
     void getTVPageSuccess() {
         MediaPage page = dao.getTVPage();
@@ -78,6 +96,9 @@ class TMDBDaoTest {
 
     }
 
+    /**
+     * Gets page returns results.
+     */
     @Test
     void getPageReturnsResults() {
         var page = dao.getPage();

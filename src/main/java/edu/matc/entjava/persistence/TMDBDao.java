@@ -15,10 +15,18 @@ import javax.ws.rs.core.MediaType;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * The type Tmdb dao.
+ */
 public class TMDBDao {
 
     private final Logger logger = LogManager.getLogger(this.getClass());
 
+    /**
+     * Gets page.
+     *
+     * @return the page
+     */
     MediaPage getPage() {
         Client client = ClientBuilder.newClient();
         //TODO Read in uri from a properties file
@@ -39,6 +47,11 @@ public class TMDBDao {
         return mediaPage;
     }
 
+    /**
+     * Gets movie page.
+     *
+     * @return the movie page
+     */
     MediaPage getMoviePage() {
         Client client = ClientBuilder.newClient();
         //TODO Read in uri from a properties file
@@ -59,6 +72,11 @@ public class TMDBDao {
         return mediaPage;
     }
 
+    /**
+     * Gets tv page.
+     *
+     * @return the tv page
+     */
     MediaPage getTVPage() {
         Client client = ClientBuilder.newClient();
         //TODO Read in uri from a properties file
@@ -80,6 +98,13 @@ public class TMDBDao {
     }
 
 
+    /**
+     * Search list.
+     *
+     * @param query the query
+     * @param type  the type
+     * @return the list
+     */
     public List<TVItem> search(String query, String type) {
         Client client = ClientBuilder.newClient();
         WebTarget target;
