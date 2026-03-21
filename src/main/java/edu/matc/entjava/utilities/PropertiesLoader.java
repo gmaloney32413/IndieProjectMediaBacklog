@@ -1,6 +1,9 @@
 package edu.matc.entjava.utilities;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.*;
 import java.util.*;
 
@@ -12,6 +15,9 @@ import java.util.*;
  *
  */
 public interface PropertiesLoader {
+
+    final Logger logger = LogManager.getLogger(PropertiesLoader.class);
+
 
     /**
      * This default method will load a properties file into a Properties instance
@@ -25,9 +31,9 @@ public interface PropertiesLoader {
         try {
             properties.load(this.getClass().getResourceAsStream(propertiesFilePath));
         } catch (IOException ioException) {
-            ioException.printStackTrace();
+            logger.error(ioException.getMessage());
         } catch (Exception exception) {
-            exception.printStackTrace();
+            logger.error(exception.getMessage());
         }
         return properties;
     }

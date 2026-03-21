@@ -1,4 +1,4 @@
-package edu.matc.entjava.web;
+package edu.matc.entjava.controller;
 
 import edu.matc.entjava.entity.MediaItem;
 import edu.matc.entjava.persistence.MediaItemDao;

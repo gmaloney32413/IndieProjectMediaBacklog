@@ -33,7 +33,7 @@ public class TestServiceClient {
         //assertEquals(expectedMediaType, item.getMediaType());
 
 
-        assertEquals("???", response);
-        //assertTrue(response.contains("results"));
+        //assertEquals("???", response);
+        assertTrue(response.contains("results"));
     }
 }

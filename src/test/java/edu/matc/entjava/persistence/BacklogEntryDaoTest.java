@@ -123,4 +123,42 @@ class BacklogEntryDaoTest {
 
         assertNull(deleted);
     }
+
+    @Test
+    void deleteBacklogEntryDoesNotDeleteUserOrMedia() {
+        BacklogEntry entry = backlogDao.getById(1L);
+        User user = entry.getUser();
+        MediaItem media = entry.getMediaItem();
+
+        backlogDao.delete(entry);
+
+        // Backlog entry deleted
+        assertNull(backlogDao.getById(entry.getId()));
+
+        // User should still exist
+        assertNotNull(userDao.getById(user.getId()));
+
+        // Media item should still exist
+        assertNotNull(mediaItemDao.getById(media.getId()));
+    }
+
+
+    @Test
+    void deleteUserAlsoDeletesBacklogEntries() {
+        User user = userDao.getById(1L); // Alice
+
+        // Get all backlog entries for this user before deletion
+        List<BacklogEntry> entriesBefore = backlogDao.getByPropertyEqual("user", user);
+        assertFalse(entriesBefore.isEmpty());
+
+        // Delete the user
+        userDao.delete(user);
+
+        // User should be gone
+        assertNull(userDao.getById(user.getId()));
+
+        // All backlog entries for this user should also be gone
+        List<BacklogEntry> entriesAfter = backlogDao.getByPropertyEqual("user", user);
+        assertTrue(entriesAfter.isEmpty(), "All backlog entries for deleted user should also be deleted");
+    }
 }

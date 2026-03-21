@@ -25,3 +25,19 @@ Indie Project: 6 hours
 - created search.jsp
 - created backlog, search, index and dashboard servlets
 - aws setup
+
+Week 7
+Indie project: 7
+- added cognito files 
+- created user pool and
+
+
+
+Week 8
+Indie project: 10
+- implemeted tmdb api and tested connection
+- created genericdao for common methods in other dao classes
+- 
+
+
+Indie project:

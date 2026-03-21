@@ -1,4 +1,4 @@
-package edu.matc.entjava.web;
+package edu.matc.entjava.controller;
 
 import edu.matc.entjava.entity.BacklogStatus;
 import edu.matc.entjava.entity.MediaItem;

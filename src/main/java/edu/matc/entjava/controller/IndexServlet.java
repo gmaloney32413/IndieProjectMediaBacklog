@@ -1,4 +1,4 @@
-package edu.matc.entjava.web;
+package edu.matc.entjava.controller;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

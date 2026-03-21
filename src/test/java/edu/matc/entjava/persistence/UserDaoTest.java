@@ -1,5 +1,6 @@
 package edu.matc.entjava.persistence;
 
+import edu.matc.entjava.entity.BacklogEntry;
 import edu.matc.entjava.entity.User;
 import edu.matc.entjava.testUtils.Database;
 import org.junit.jupiter.api.BeforeEach;
@@ -146,6 +147,38 @@ class UserDaoTest {
 
         // Should not create a new record
         assertEquals(3, userDao.getAll().size());
+    }
+
+
+    @Test
+    void deleteBacklogEntryDoesNotDeleteUser() {
+        BacklogEntryDao entryDao = new BacklogEntryDao();
+        BacklogEntry entry = entryDao.getById(1L);
+        User user = entry.getUser();
+
+        entryDao.delete(entry);
+
+        // User should still exist
+        User existingUser = userDao.getById(user.getId());
+        assertNotNull(existingUser, "User should not be deleted when their backlog entry is deleted");
+    }
+
+
+    @Test
+    void deleteUserAlsoDeletesBacklogEntries() {
+        User user = userDao.getById(1L);
+
+        BacklogEntryDao entryDao = new BacklogEntryDao();
+        List<BacklogEntry> entriesBefore = entryDao.getByPropertyEqual("user", user);
+        assertFalse(entriesBefore.isEmpty(), "User should have backlog entries");
+
+        userDao.delete(user);
+
+        User deletedUser = userDao.getById(1L);
+        assertNull(deletedUser, "User should be deleted");
+
+        List<BacklogEntry> entriesAfter = entryDao.getByPropertyEqual("user", user);
+        assertTrue(entriesAfter.isEmpty(), "All backlog entries for deleted user should also be deleted");
     }
 
 }

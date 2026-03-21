@@ -136,7 +136,7 @@ public class TMDBDao {
             MediaPage page = mapper.readValue(response, MediaPage.class);
             return page.getResults();
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
             return Collections.emptyList();
         }
     }
