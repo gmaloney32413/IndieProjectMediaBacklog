@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "tv_shows")
-@DiscriminatorValue("tv")
+@DiscriminatorValue("tv_show")
 @PrimaryKeyJoinColumn(name = "id")
 public class TvShow extends MediaItem{
 

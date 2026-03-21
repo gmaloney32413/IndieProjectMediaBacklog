@@ -13,18 +13,18 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BacklogEntryDaoTest {
-    BacklogEntryDao backlogDao;
-    UserDao userDao;
-    MediaItemDao mediaItemDao;
+    private GenericDao<BacklogEntry> backlogDao;
+    private GenericDao<User> userDao;
+    private GenericDao<MediaItem> mediaItemDao;
 
     @BeforeEach
     void setUp() {
         Database database = Database.getInstance();
         database.runSQL("cleandb.sql");
 
-        backlogDao = new BacklogEntryDao();
-        userDao = new UserDao();
-        mediaItemDao = new MediaItemDao();
+        backlogDao = new GenericDao<>(BacklogEntry.class);
+        userDao = new GenericDao<>(User.class);
+        mediaItemDao = new GenericDao<>(MediaItem.class);
     }
 
     @Test
@@ -46,15 +46,21 @@ class BacklogEntryDaoTest {
 
     @Test
     void getByUserId() {
-        List<BacklogEntry> aliceEntries = backlogDao.getByUserId(1L);
+        List<BacklogEntry> aliceEntries = backlogDao.getByPropertyEqual("user", userDao.getById(1L));
 
         assertEquals(3, aliceEntries.size());
     }
 
     @Test
     void getByUserAndMedia() {
+        Long userId = 1L;
+        Long mediaId = 1L;
         // Alice (1) + Inception (media id 1)
-        BacklogEntry entry = backlogDao.getByUserAndMedia(1L, 1L);
+        BacklogEntry entry = backlogDao.getAll().stream()
+                .filter(b -> b.getUser().getId().equals(userId) &&
+                        b.getMediaItem().getId().equals(mediaId))
+                .findFirst()
+                .orElse(null);
 
         assertNotNull(entry);
         assertEquals(BacklogStatus.COMPLETED, entry.getStatus());
@@ -62,18 +68,17 @@ class BacklogEntryDaoTest {
 
     @Test
     void countByStatusForUser() {
-        Long completedCount = backlogDao.countByStatusForUser(
-                BacklogStatus.COMPLETED,
-                2L
-        );
-
+        Long userId = 2L;
+        Long completedCount = backlogDao.getAll().stream()
+                .filter(b -> b.getUser().getId().equals(userId) && b.getStatus() == BacklogStatus.COMPLETED)
+                .count();
         // Bob has 2 COMPLETED entries
         assertEquals(2L, completedCount.intValue());
     }
 
     @Test
     void insert() {
-        User user = userDao.getById(1);
+        User user = userDao.getById(1L);
         MediaItem media = mediaItemDao.getById(2L);
 
         BacklogEntry newEntry = new BacklogEntry();

@@ -3,10 +3,11 @@ package edu.matc.entjava.web;
 
 import edu.matc.entjava.entity.BacklogEntry;
 import edu.matc.entjava.entity.BacklogStatus;
+import edu.matc.entjava.entity.MediaItem;
 import edu.matc.entjava.entity.User;
 import edu.matc.entjava.persistence.BacklogEntryDao;
+import edu.matc.entjava.persistence.GenericDao;
 import edu.matc.entjava.persistence.MediaItemDao;
-import edu.matc.entjava.persistence.UserDao;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,20 +16,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import javax.servlet.http.*;
-
 @WebServlet("/editBacklog")
 public class EditBacklogServlet extends HttpServlet {
 
     private BacklogEntryDao backlogEntryDao;
     private MediaItemDao mediaItemDao;
-    private UserDao userDao;
+    private GenericDao<User> userDao;
 
     @Override
     public void init() {
         backlogEntryDao = new BacklogEntryDao();
         mediaItemDao = new MediaItemDao();
-        userDao = new UserDao();
+        userDao = new GenericDao<>(User.class);
     }
 
     @Override
@@ -47,16 +46,15 @@ public class EditBacklogServlet extends HttpServlet {
         Long mediaId = Long.parseLong(idParam);
 
         // Try to find an existing backlog entry for this user and media item
-        BacklogEntry entry = backlogEntryDao.getByUserAndMedia(currentUserId, mediaId);
+        User currentUser = userDao.getById(currentUserId);
+        MediaItem mediaItem = mediaItemDao.getById(mediaId);
+
+        BacklogEntry entry = backlogEntryDao.getByUserAndMedia(currentUser, mediaItem);
 
         // Only allow access if the entry belongs to user ID 1
         if (entry == null) {
             // No entry exists, create a new backlog entry for this media item
             entry = new BacklogEntry();
-
-            // Set the user
-            User currentUser = userDao.getById((int) currentUserId);
-            entry.setUser(currentUser);
 
             // Set the media item from the MediaItemDao
             entry.setMediaItem(mediaItemDao.getById(mediaId));
@@ -104,7 +102,7 @@ public class EditBacklogServlet extends HttpServlet {
 
             Long mediaId = Long.parseLong(request.getParameter("mediaId"));
 
-            User user = userDao.getById(1);
+            User user = userDao.getById(1L);
             entry.setUser(user);
             entry.setMediaItem(mediaItemDao.getById(mediaId));
             entry.setDateAdded(new java.util.Date());

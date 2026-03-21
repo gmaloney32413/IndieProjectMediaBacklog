@@ -2,13 +2,14 @@ package edu.matc.entjava.controller;
 
 
 import com.auth0.jwt.JWT;
+import edu.matc.entjava.persistence.GenericDao;
+import java.util.List;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.matc.entjava.auth.*;
 import edu.matc.entjava.entity.User;
-import edu.matc.entjava.persistence.UserDao;
 import edu.matc.entjava.utilities.PropertiesLoader;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -213,8 +214,19 @@ public class Auth extends HttpServlet implements PropertiesLoader {
         String name = jwt.getClaim("name").asString(); // optional
 
         // Get or create user in the database
-        UserDao userDao = new UserDao();
-        User user = userDao.getOrCreateUser(cognitoSub, email, username, name);
+        GenericDao<User> userDao = new GenericDao<>(User.class);
+
+        // Check if user already exists
+        List<User> users = userDao.getByPropertyEqual("cognitoSub", cognitoSub);
+
+        User user;
+
+        if (users.isEmpty()) {
+            user = new User(null, cognitoSub, email, username, name);
+            userDao.insert(user);
+        } else {
+            user = users.get(0);
+        }
 
         // Store user in session
         HttpSession session = req.getSession(true);

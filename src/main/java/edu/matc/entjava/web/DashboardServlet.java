@@ -1,9 +1,10 @@
 package edu.matc.entjava.web;
 
-import edu.matc.entjava.entity.BacklogEntry;
 import edu.matc.entjava.entity.BacklogStatus;
 import edu.matc.entjava.entity.MediaItem;
+import edu.matc.entjava.entity.User;
 import edu.matc.entjava.persistence.BacklogEntryDao;
+import edu.matc.entjava.persistence.GenericDao;
 import edu.matc.entjava.persistence.MediaItemDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,6 +30,8 @@ public class DashboardServlet extends HttpServlet {
 
         Long userId = 1L; // hardcoded for now (until Cognito)
 
+        GenericDao<User> userDao = new GenericDao<>(User.class);
+        User currentUser = userDao.getById(userId);
         // Get search parameters (if present)
         String searchQuery = request.getParameter("searchQuery");
         String searchType = request.getParameter("searchType");
@@ -47,10 +50,10 @@ public class DashboardServlet extends HttpServlet {
 
 
         // Count backlog entries by status
-        Long plannedCount = backlogEntryDao.countByStatusForUser(BacklogStatus.PLANNED, userId);
-        Long inProgressCount = backlogEntryDao.countByStatusForUser(BacklogStatus.IN_PROGRESS, userId);
-        Long completedCount = backlogEntryDao.countByStatusForUser(BacklogStatus.COMPLETED, userId);
-        Long droppedCount = backlogEntryDao.countByStatusForUser(BacklogStatus.DROPPED, userId);
+        Long plannedCount = backlogEntryDao.countByStatusForUser(currentUser, BacklogStatus.PLANNED);
+        Long inProgressCount = backlogEntryDao.countByStatusForUser(currentUser, BacklogStatus.IN_PROGRESS);
+        Long completedCount = backlogEntryDao.countByStatusForUser(currentUser, BacklogStatus.COMPLETED);
+        Long droppedCount = backlogEntryDao.countByStatusForUser(currentUser, BacklogStatus.DROPPED);
 
         request.setAttribute("plannedCount", plannedCount);
         request.setAttribute("inProgressCount", inProgressCount);

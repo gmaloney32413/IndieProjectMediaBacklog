@@ -36,9 +36,10 @@ public abstract class  MediaItem {
 
     /**
      * The Media type.
-    @Column(name = "media_type")
-    String mediaType;
      */
+    @Column(name = "media_type", insertable = false, updatable = false)
+    private String mediaType;
+
 
     /**
      * The Release date.
@@ -148,15 +149,6 @@ public abstract class  MediaItem {
         this.overview = overview;
     }
 
-    /**
-     * Gets media type.
-     *
-     * @return the media type
-
-    public String getMediaType() {
-        return mediaType;
-    }
-    */
 
     public abstract String getMediaType();
 
@@ -164,11 +156,12 @@ public abstract class  MediaItem {
      * Sets media type.
      *
      * @param mediaType the media type
+     *
 
     public void setMediaType(String mediaType) {
         this.mediaType = mediaType;
     }
-    */
+     */
 
     /**
      * Gets release date.

@@ -2,9 +2,7 @@ package edu.matc.entjava.web;
 
 
 import edu.matc.entjava.entity.BacklogEntry;
-import edu.matc.entjava.entity.BacklogStatus;
-import edu.matc.entjava.persistence.BacklogEntryDao;
-import edu.matc.entjava.persistence.MediaItemDao;
+import edu.matc.entjava.persistence.GenericDao;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,16 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import javax.servlet.http.*;
-
 @WebServlet("/deleteBacklog")
 public class DeleteBacklogServlet extends HttpServlet {
 
-    private BacklogEntryDao backlogEntryDao;
+    private GenericDao<BacklogEntry> backlogDao;
 
     @Override
     public void init() {
-        backlogEntryDao = new BacklogEntryDao();
+        backlogDao = new GenericDao<>(BacklogEntry.class);
     }
 
     @Override
@@ -35,10 +31,10 @@ public class DeleteBacklogServlet extends HttpServlet {
         String idParam = request.getParameter("id");
         if (idParam != null && !idParam.isEmpty()) {
             Long id = Long.parseLong(idParam);
-            BacklogEntry entry = backlogEntryDao.getById(id);
+            BacklogEntry entry = backlogDao.getById(id);
 
             if (entry != null && entry.getUser().getId().equals(currentUserId)) {
-                backlogEntryDao.delete(entry);
+                backlogDao.delete(entry);
             }
         }
 
