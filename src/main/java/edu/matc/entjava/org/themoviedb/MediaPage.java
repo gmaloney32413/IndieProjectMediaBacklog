@@ -8,8 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * The type Media page.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-
-public class MediaPage{
+public class MediaPage<T> {
 
 	@JsonProperty("page")
 	private int page;
@@ -18,82 +17,22 @@ public class MediaPage{
 	private int totalPages;
 
 	@JsonProperty("results")
-	private List<TVItem> results;
+	private List<T> results;
 
 	@JsonProperty("total_results")
 	private int totalResults;
 
-	/**
-	 * Set page.
-	 *
-	 * @param page the page
-	 */
-	public void setPage(int page){
-		this.page = page;
-	}
+	public int getPage() { return page; }
+	public void setPage(int page) { this.page = page; }
 
-	/**
-	 * Get page int.
-	 *
-	 * @return the int
-	 */
-	public int getPage(){
-		return page;
-	}
+	public int getTotalPages() { return totalPages; }
+	public void setTotalPages(int totalPages) { this.totalPages = totalPages; }
 
-	/**
-	 * Set total pages.
-	 *
-	 * @param totalPages the total pages
-	 */
-	public void setTotalPages(int totalPages){
-		this.totalPages = totalPages;
-	}
+	public List<T> getResults() { return results; }
+	public void setResults(List<T> results) { this.results = results; }
 
-	/**
-	 * Get total pages int.
-	 *
-	 * @return the int
-	 */
-	public int getTotalPages(){
-		return totalPages;
-	}
-
-	/**
-	 * Set results.
-	 *
-	 * @param results the results
-	 */
-	public void setResults(List<TVItem> results){
-		this.results = results;
-	}
-
-	/**
-	 * Get results list.
-	 *
-	 * @return the list
-	 */
-	public List<TVItem> getResults(){
-		return results;
-	}
-
-	/**
-	 * Set total results.
-	 *
-	 * @param totalResults the total results
-	 */
-	public void setTotalResults(int totalResults){
-		this.totalResults = totalResults;
-	}
-
-	/**
-	 * Get total results int.
-	 *
-	 * @return the int
-	 */
-	public int getTotalResults(){
-		return totalResults;
-	}
+	public int getTotalResults() { return totalResults; }
+	public void setTotalResults(int totalResults) { this.totalResults = totalResults; }
 
 	@Override
  	public String toString(){

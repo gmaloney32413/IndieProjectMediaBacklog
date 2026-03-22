@@ -37,6 +37,12 @@
 
     <form action="editBacklog" method="post">
 
+        <input type="hidden" name="tmdbId" value="${backlogEntry.mediaItem.tmdbId}">
+        <input type="hidden" name="mediaType" value="${backlogEntry.mediaItem.mediaType}">
+        <input type="hidden" name="title" value="${backlogEntry.mediaItem.title}">
+        <input type="hidden" name="overview" value="${backlogEntry.mediaItem.overview}">
+        <input type="hidden" name="posterUrl" value="${backlogEntry.mediaItem.posterUrl}">
+
         <input type="hidden" name="mediaId" value="${backlogEntry.mediaItem.id}">
 
         <!-- Hidden ID only if editing -->

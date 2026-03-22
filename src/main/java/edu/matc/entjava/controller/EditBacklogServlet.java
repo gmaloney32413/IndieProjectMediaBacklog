@@ -35,34 +35,65 @@ public class EditBacklogServlet extends HttpServlet {
                          HttpServletResponse response)
             throws ServletException, IOException {
 
-        final long currentUserId = 1L; // hardcoded for now
+        final long currentUserId = 1L;
 
-        String idParam = request.getParameter("id");
-        if (idParam == null) {
-            response.sendRedirect("backlog");
-            return;
+        String entryIdParam = request.getParameter("entryId");
+        BacklogEntry entry = null;
+
+        if (entryIdParam != null && !entryIdParam.isEmpty()) {
+            entry = backlogEntryDao.getById(Long.parseLong(entryIdParam));
         }
 
-        Long mediaId = Long.parseLong(idParam);
+        MediaItem mediaItem = null;
 
-        // Try to find an existing backlog entry for this user and media item
-        User currentUser = userDao.getById(currentUserId);
-        MediaItem mediaItem = mediaItemDao.getById(mediaId);
+        if (entry != null) {
+            // editing existing entry
+            mediaItem = entry.getMediaItem();
+        } else {
+            // existing logic for mediaItem via id or tmdbId
+            String idParam = request.getParameter("id");
+            String tmdbIdParam = request.getParameter("tmdbId");
 
-        BacklogEntry entry = backlogEntryDao.getByUserAndMedia(currentUser, mediaItem);
+            // Case 1: Media item already exists in DB
+            if (idParam != null && !idParam.isEmpty()) {
+                Long mediaId = Long.parseLong(idParam);
+                mediaItem = mediaItemDao.getById(mediaId);
+            }
+            // Case 2: Item came from TMDB search results
+            else if (tmdbIdParam != null && !tmdbIdParam.isEmpty()) {
+                Long tmdbId = Long.parseLong(tmdbIdParam);
+                mediaItem = mediaItemDao
+                        .getByPropertyEqual("tmdbId", tmdbId)
+                        .stream()
+                        .findFirst()
+                        .orElse(null);
 
-        // Only allow access if the entry belongs to user ID 1
-        if (entry == null) {
-            // No entry exists, create a new backlog entry for this media item
+                if (mediaItem == null) {
+                    String mediaType = request.getParameter("mediaType");
+
+                    if ("movie".equalsIgnoreCase(mediaType)) {
+                        mediaItem = new edu.matc.entjava.entity.Movie();
+                    } else if ("tv".equalsIgnoreCase(mediaType)) {
+                        mediaItem = new edu.matc.entjava.entity.TvShow();
+                    }
+                    mediaItem.setTmdbId(tmdbId);
+                    mediaItem.setTitle(request.getParameter("title"));
+                    mediaItem.setOverview(request.getParameter("overview"));
+                    mediaItem.setPosterUrl(request.getParameter("posterUrl"));
+                }
+            } else {
+                response.sendRedirect("backlog");
+                return;
+            }
+
+            // No existing entry, create a new one for the form
+            User currentUser = userDao.getById(currentUserId);
             entry = new BacklogEntry();
-
-            // Set the media item from the MediaItemDao
-            entry.setMediaItem(mediaItemDao.getById(mediaId));
-
-            // Optionally set default values for status, rating, notes
-            entry.setStatus(BacklogStatus.PLANNED); // or null if you prefer
+            entry.setMediaItem(mediaItem);
+            entry.setStatus(BacklogStatus.PLANNED);
             entry.setUserRating(null);
             entry.setNotes("");
+            entry.setUser(currentUser);
         }
 
         request.setAttribute("backlogStatuses", BacklogStatus.values());
@@ -74,57 +105,73 @@ public class EditBacklogServlet extends HttpServlet {
 
 
     @Override
-    protected void doPost(HttpServletRequest request,
-                          HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Get parameters from the form
         String entryIdParam = request.getParameter("entryId");
         String mediaIdParam = request.getParameter("mediaId");
+        String tmdbIdParam = request.getParameter("tmdbId"); // added
+        String mediaType = request.getParameter("mediaType");
+        String title = request.getParameter("title");
+        String overview = request.getParameter("overview");
+        String posterUrl = request.getParameter("posterUrl");
         String statusParam = request.getParameter("status");
         String userRatingParam = request.getParameter("userRating");
         String notesParam = request.getParameter("notes");
 
-        BacklogEntry entry;
+        MediaItem mediaItem = null;
 
-        if (entryIdParam != null && !entryIdParam.isEmpty()) {
-            // Editing an existing entry
-            Long id = Long.parseLong(entryIdParam);
-            entry = backlogEntryDao.getById(id);
-            if (entry == null) {
-                // If somehow the entry doesn't exist, redirect back
-                response.sendRedirect("backlog");
-                return;
+        if (mediaIdParam != null && !mediaIdParam.isEmpty()) {
+            Long mediaId = Long.parseLong(mediaIdParam);
+            mediaItem = mediaItemDao.getById(mediaId);
+        }
+
+        // If not found by mediaId, check tmdbId and create new
+        if (mediaItem == null && tmdbIdParam != null && !tmdbIdParam.isEmpty()) {
+            Long tmdbId = Long.parseLong(tmdbIdParam);
+
+            mediaItem = mediaItemDao.getByPropertyEqual("tmdbId", tmdbId)
+                    .stream().findFirst().orElse(null);
+
+            if (mediaItem == null) {
+                if ("movie".equalsIgnoreCase(mediaType)) {
+                    mediaItem = new edu.matc.entjava.entity.Movie();
+                } else if ("tv".equalsIgnoreCase(mediaType)) {
+                    mediaItem = new edu.matc.entjava.entity.TvShow();
+                }
+                mediaItem.setTmdbId(tmdbId);
+                mediaItem.setTitle(title);
+                mediaItem.setOverview(overview);
+                mediaItem.setPosterUrl(posterUrl);
+                mediaItemDao.insert(mediaItem);
             }
+        }
+
+        User user = userDao.getById(1L);
+        if (user == null) throw new ServletException("User not found");
+
+        BacklogEntry entry;
+        if (entryIdParam != null && !entryIdParam.isEmpty()) {
+            entry = backlogEntryDao.getById(Long.parseLong(entryIdParam));
         } else {
-            // Adding a new entry
             entry = new BacklogEntry();
-
-            Long mediaId = Long.parseLong(request.getParameter("mediaId"));
-
-            User user = userDao.getById(1L);
             entry.setUser(user);
-            entry.setMediaItem(mediaItemDao.getById(mediaId));
+            entry.setMediaItem(mediaItem);
             entry.setDateAdded(new java.util.Date());
         }
 
-        // Set/update fields from the form
-        if (statusParam != null && !statusParam.isEmpty()) {
-            entry.setStatus(BacklogStatus.valueOf(statusParam));
-        }
-
-        if (userRatingParam != null && !userRatingParam.isEmpty()) {
-            entry.setUserRating(Integer.parseInt(userRatingParam));
-        } else {
-            entry.setUserRating(null);
-        }
-
+        entry.setStatus(statusParam != null ? BacklogStatus.valueOf(statusParam) : BacklogStatus.PLANNED);
+        entry.setUserRating(userRatingParam != null && !userRatingParam.isEmpty() ? Integer.parseInt(userRatingParam) : null);
         entry.setNotes(notesParam);
 
-        // Save to database (update or insert)
-        backlogEntryDao.update(entry);
+        if (entryIdParam != null && !entryIdParam.isEmpty()) {
+            // existing entry → update
+            backlogEntryDao.update(entry);
+        } else {
+            // new entry → insert
+            backlogEntryDao.insert(entry);
+        }
 
-        // Redirect to the backlog listing page
-        response.sendRedirect("backlog"); // make sure /backlog maps to your backlog.jsp servlet
+        response.sendRedirect("backlog");
     }
 }

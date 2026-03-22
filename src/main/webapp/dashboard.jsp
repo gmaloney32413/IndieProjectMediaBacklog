@@ -85,7 +85,16 @@
                         <td>${item.mediaType}</td>
                         <td>${item.releaseDate}</td>
                         <td>
-                            <a href="editBacklog?id=${item.id}">Add</a>
+                            <form action="editBacklog" method="post">
+                                <input type="hidden" name="tmdbId" value="${item.tmdbId}" />
+                                <input type="hidden" name="mediaType" value="${item.mediaType}" />
+                                <input type="hidden" name="title" value="${item.title}" />
+                                <input type="hidden" name="overview" value="${item.overview}" />
+                                <input type="hidden" name="posterUrl" value="${item.posterUrl}" />
+                                <input type="hidden" name="status" value="PLANNED" />
+                                <button type="submit">Add</button>
+                            </form>
+                            </a>
                         </td>
                     </tr>
                 </c:forEach>

@@ -1,6 +1,7 @@
 package edu.matc.entjava.persistence;
 
 import edu.matc.entjava.org.themoviedb.MediaPage;
+import edu.matc.entjava.org.themoviedb.MovieItem;
 import edu.matc.entjava.org.themoviedb.TVItem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,12 +59,12 @@ class TMDBDaoTest {
      */
     @Test
     void getMoviePageSuccess() {
-        MediaPage page = dao.getMoviePage();
+        MediaPage<MovieItem> page = dao.getMoviePage();
 
         assertNotNull(page);
         assertFalse(page.getResults().isEmpty());
 
-        TVItem firstItem = page.getResults().get(0);
+        MovieItem firstItem = page.getResults().get(0);
 
         assertNotNull(firstItem);
         assertTrue(firstItem.getId() > 0);
@@ -79,7 +80,7 @@ class TMDBDaoTest {
      */
     @Test
     void getTVPageSuccess() {
-        MediaPage page = dao.getTVPage();
+        MediaPage<TVItem> page = dao.getTVPage();
 
         assertNotNull(page);
         assertFalse(page.getResults().isEmpty());
@@ -107,4 +108,55 @@ class TMDBDaoTest {
         assertNotNull(page.getResults(), "Results list should not be null");
         assertFalse(page.getResults().isEmpty(), "Results list should not be empty");
     }
+
+    @Test
+    void searchTvReturnsResults() {
+        List<TVItem> results = dao.searchTv("one piece");
+        assertNotNull(results, "Results should not be null");
+        assertFalse(results.isEmpty(), "Results should not be empty");
+
+        TVItem firstItem = results.get(0);
+        assertNotNull(firstItem, "First TVItem should not be null");
+        assertTrue(firstItem.getId() > 0, "TVItem ID should be positive");
+        assertNotNull(firstItem.getName(), "TVItem should have a name");
+    }
+
+    @Test
+    void searchMoviesReturnsResults() {
+        List<MovieItem> results = dao.searchMovies("avengers");
+        assertNotNull(results, "Results should not be null");
+        assertFalse(results.isEmpty(), "Results should not be empty");
+
+        MovieItem firstItem = results.get(0);
+        assertNotNull(firstItem, "First MovieItem should not be null");
+        assertTrue(firstItem.getId() > 0, "MovieItem ID should be positive");
+        assertNotNull(firstItem.getTitle(), "MovieItem should have a title");
+        //assertEquals(firstItem.getTitle(), "ONE PIECE");
+    }
+
+    @Test
+    void searchMovieTypeReturnsMovieItems() {
+        List<TVItem> results = dao.search("avengers", "movie");
+        assertNotNull(results);
+        assertFalse(results.isEmpty());
+    }
+
+    @Test
+    void searchTvTypeReturnsTvItems() {
+        List<TVItem> results = dao.search("one piece", "tv");
+        assertNotNull(results);
+        assertFalse(results.isEmpty());
+
+            TVItem firstItem = results.get(0);
+        assertNotNull(firstItem.getName(), "TVItem should have a name");
+    }
+
+    @Test
+    void searchAnyTypeCombinesResults() {
+        List<TVItem> results = dao.search("one piece", "any");
+        assertNotNull(results);
+        assertFalse(results.isEmpty());
+        assertTrue(results.size() > 1, "Results should combine movie and tv results");
+    }
+
 }

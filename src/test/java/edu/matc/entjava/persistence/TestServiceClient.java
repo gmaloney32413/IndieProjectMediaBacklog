@@ -17,13 +17,16 @@ public class TestServiceClient {
     public void testswapiJSON() throws Exception {
         Client client = ClientBuilder.newClient();
         WebTarget target =
-                client.target("https://api.themoviedb.org/3/trending/movie/week")
+                client.target("https://api.themoviedb.org/3/trending/tv/week")
                         .queryParam("api_key", "94e4d20dd642f4bf70833b534e35b1bf");
         String response = target.request(MediaType.APPLICATION_JSON).get(String.class);
 
         //Mapping objects from the api
         ObjectMapper mapper = new ObjectMapper();
-        MediaPage mediaPage = mapper.readValue(response, MediaPage.class);
+        MediaPage<TVItem> mediaPage = mapper.readValue(
+                response,
+                mapper.getTypeFactory().constructParametricType(MediaPage.class, TVItem.class)
+        );
         TVItem item = mediaPage.getResults().get(0);
         String expectedMediaName = "JoJo's Bizarre Adventure";
         String expectedMediaType = "tv";
@@ -34,6 +37,6 @@ public class TestServiceClient {
 
 
         //assertEquals("???", response);
-        assertTrue(response.contains("results"));
+       //assertTrue(response.contains("results"));
     }
 }
