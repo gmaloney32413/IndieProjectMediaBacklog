@@ -32,6 +32,9 @@ public class TMDBDao implements PropertiesLoader {
 
     private final ObjectMapper mapper;
 
+    /**
+     * Instantiates a new Tmdb dao.
+     */
     public TMDBDao() {
         mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -54,14 +57,29 @@ public class TMDBDao implements PropertiesLoader {
         }
     }
 
+    /**
+     * Gets page.
+     *
+     * @return the page
+     */
     public MediaPage<TVItem> getPage() {
         return fetchMediaPage("/trending/all/week", TVItem.class);
     }
 
+    /**
+     * Gets movie page.
+     *
+     * @return the movie page
+     */
     public MediaPage<MovieItem> getMoviePage() {
         return fetchMediaPage("/trending/movie/week", MovieItem.class);
     }
 
+    /**
+     * Gets tv page.
+     *
+     * @return the tv page
+     */
     public MediaPage<TVItem> getTVPage() {
         return fetchMediaPage("/trending/tv/week", TVItem.class);
     }
@@ -112,6 +130,12 @@ public class TMDBDao implements PropertiesLoader {
         }
     }
 
+    /**
+     * Search tv list.
+     *
+     * @param query the query
+     * @return the list
+     */
     public List<TVItem> searchTv(String query) {
         try {
             String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
@@ -123,6 +147,12 @@ public class TMDBDao implements PropertiesLoader {
         }
     }
 
+    /**
+     * Search movies list.
+     *
+     * @param query the query
+     * @return the list
+     */
     public List<MovieItem> searchMovies(String query) {
         try {
             String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
@@ -148,10 +178,22 @@ public class TMDBDao implements PropertiesLoader {
         }
     }
 
+    /**
+     * Gets movie details.
+     *
+     * @param tmdbId the tmdb id
+     * @return the movie details
+     */
     public MovieItem getMovieDetails(long tmdbId) {
         return fetchDetails("/movie/" + tmdbId, MovieItem.class);
     }
 
+    /**
+     * Gets tv details.
+     *
+     * @param tmdbId the tmdb id
+     * @return the tv details
+     */
     public TVItem getTVDetails(long tmdbId) {
         return fetchDetails("/tv/" + tmdbId, TVItem.class);
     }

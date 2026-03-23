@@ -68,13 +68,31 @@ public class TVItem {
 	@JsonProperty("in_production")
 	private boolean ongoing;
 
-	// --- GETTERS ---
+	/**
+	 * Gets number of seasons.
+	 *
+	 * @return the number of seasons
+	 */
+// --- GETTERS ---
 	public int getNumberOfSeasons() { return numberOfSeasons; }
+
+	/**
+	 * Gets total episodes.
+	 *
+	 * @return the total episodes
+	 */
 	public int getTotalEpisodes() { return totalEpisodes; }
+
+	/**
+	 * Gets ongoing.
+	 *
+	 * @return the ongoing
+	 */
 	public boolean getOngoing() { return ongoing; }
 
 	// --- Existing getters/setters (keep your previous ones) ---
 	// getName(), getTitle(), getOverview(), etc.
+
 	/**
 	 * Set title.
 	 *

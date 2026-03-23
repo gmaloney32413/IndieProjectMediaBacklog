@@ -16,6 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * The type Media details servlet.
+ */
 @WebServlet("/mediaDetails")
 public class MediaDetailsServlet extends HttpServlet {
     private MediaItemDao mediaItemDao = new MediaItemDao();

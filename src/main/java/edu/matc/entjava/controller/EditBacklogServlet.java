@@ -1,13 +1,17 @@
 package edu.matc.entjava.controller;
 
-
 import edu.matc.entjava.entity.BacklogEntry;
 import edu.matc.entjava.entity.BacklogStatus;
 import edu.matc.entjava.entity.MediaItem;
 import edu.matc.entjava.entity.User;
+import edu.matc.entjava.entity.Movie;
+import edu.matc.entjava.entity.TvShow;
 import edu.matc.entjava.persistence.BacklogEntryDao;
 import edu.matc.entjava.persistence.GenericDao;
 import edu.matc.entjava.persistence.MediaItemDao;
+import edu.matc.entjava.org.themoviedb.MovieItem;
+import edu.matc.entjava.org.themoviedb.TVItem;
+import edu.matc.entjava.persistence.TMDBDao;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,12 +26,14 @@ public class EditBacklogServlet extends HttpServlet {
     private BacklogEntryDao backlogEntryDao;
     private MediaItemDao mediaItemDao;
     private GenericDao<User> userDao;
+    private TMDBDao tmdbDao; // added TMDB DAO
 
     @Override
     public void init() {
         backlogEntryDao = new BacklogEntryDao();
         mediaItemDao = new MediaItemDao();
         userDao = new GenericDao<>(User.class);
+        tmdbDao = new TMDBDao(); // initialize TMDB DAO
     }
 
     @Override
@@ -47,35 +53,27 @@ public class EditBacklogServlet extends HttpServlet {
         MediaItem mediaItem = null;
 
         if (entry != null) {
-            // editing existing entry
             mediaItem = entry.getMediaItem();
         } else {
-            // existing logic for mediaItem via id or tmdbId
             String idParam = request.getParameter("id");
             String tmdbIdParam = request.getParameter("tmdbId");
 
-            // Case 1: Media item already exists in DB
             if (idParam != null && !idParam.isEmpty()) {
                 Long mediaId = Long.parseLong(idParam);
                 mediaItem = mediaItemDao.getById(mediaId);
-            }
-            // Case 2: Item came from TMDB search results
-            else if (tmdbIdParam != null && !tmdbIdParam.isEmpty()) {
+            } else if (tmdbIdParam != null && !tmdbIdParam.isEmpty()) {
                 Long tmdbId = Long.parseLong(tmdbIdParam);
-                mediaItem = mediaItemDao
-                        .getByPropertyEqual("tmdbId", tmdbId)
-                        .stream()
-                        .findFirst()
-                        .orElse(null);
+                mediaItem = mediaItemDao.getByPropertyEqual("tmdbId", tmdbId)
+                        .stream().findFirst().orElse(null);
 
                 if (mediaItem == null) {
                     String mediaType = request.getParameter("mediaType");
-
                     if ("movie".equalsIgnoreCase(mediaType)) {
-                        mediaItem = new edu.matc.entjava.entity.Movie();
+                        mediaItem = new Movie();
                     } else if ("tv".equalsIgnoreCase(mediaType)) {
-                        mediaItem = new edu.matc.entjava.entity.TvShow();
+                        mediaItem = new TvShow();
                     }
+
                     mediaItem.setTmdbId(tmdbId);
                     mediaItem.setTitle(request.getParameter("title"));
                     mediaItem.setOverview(request.getParameter("overview"));
@@ -86,7 +84,6 @@ public class EditBacklogServlet extends HttpServlet {
                 return;
             }
 
-            // No existing entry, create a new one for the form
             User currentUser = userDao.getById(currentUserId);
             entry = new BacklogEntry();
             entry.setMediaItem(mediaItem);
@@ -98,11 +95,9 @@ public class EditBacklogServlet extends HttpServlet {
 
         request.setAttribute("backlogStatuses", BacklogStatus.values());
         request.setAttribute("backlogEntry", entry);
-
         request.getRequestDispatcher("/editBacklog.jsp")
                 .forward(request, response);
     }
-
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -110,7 +105,7 @@ public class EditBacklogServlet extends HttpServlet {
 
         String entryIdParam = request.getParameter("entryId");
         String mediaIdParam = request.getParameter("mediaId");
-        String tmdbIdParam = request.getParameter("tmdbId"); // added
+        String tmdbIdParam = request.getParameter("tmdbId");
         String mediaType = request.getParameter("mediaType");
         String title = request.getParameter("title");
         String overview = request.getParameter("overview");
@@ -126,7 +121,6 @@ public class EditBacklogServlet extends HttpServlet {
             mediaItem = mediaItemDao.getById(mediaId);
         }
 
-        // If not found by mediaId, check tmdbId and create new
         if (mediaItem == null && tmdbIdParam != null && !tmdbIdParam.isEmpty()) {
             Long tmdbId = Long.parseLong(tmdbIdParam);
 
@@ -135,9 +129,9 @@ public class EditBacklogServlet extends HttpServlet {
 
             if (mediaItem == null) {
                 if ("movie".equalsIgnoreCase(mediaType)) {
-                    mediaItem = new edu.matc.entjava.entity.Movie();
+                    mediaItem = new Movie();
                 } else if ("tv".equalsIgnoreCase(mediaType) || "tv_show".equalsIgnoreCase(mediaType)) {
-                    mediaItem = new edu.matc.entjava.entity.TvShow();
+                    mediaItem = new TvShow();
                 }
 
                 if (mediaItem == null) {
@@ -148,6 +142,25 @@ public class EditBacklogServlet extends HttpServlet {
                 mediaItem.setTitle(title);
                 mediaItem.setOverview(overview);
                 mediaItem.setPosterUrl(posterUrl);
+
+                // **Populate extra fields from TMDB**
+                try {
+                    if (mediaItem instanceof Movie) {
+                        MovieItem movieItem = tmdbDao.getMovieDetails(tmdbId.intValue());
+                        ((Movie) mediaItem).setRuntime(movieItem.getRuntime());
+                        ((Movie) mediaItem).setRating(movieItem.getRating());
+                        ((Movie) mediaItem).setDirector(movieItem.getDirector());
+                    } else if (mediaItem instanceof TvShow) {
+                        TVItem tvItem = tmdbDao.getTVDetails(tmdbId.intValue());
+                        ((TvShow) mediaItem).setNumberOfSeasons(tvItem.getNumberOfSeasons());
+                        ((TvShow) mediaItem).setTotalEpisodes(tvItem.getTotalEpisodes());
+                        ((TvShow) mediaItem).setOngoing(tvItem.getOngoing());
+                    }
+                } catch (Exception e) {
+                    // log and continue without extra fields
+                    e.printStackTrace();
+                }
+
                 mediaItemDao.insert(mediaItem);
             }
         }
@@ -162,15 +175,12 @@ public class EditBacklogServlet extends HttpServlet {
                 throw new ServletException("BacklogEntry not found for ID: " + entryIdParam);
             }
         } else {
-            // Check if an entry already exists for this user and media
             BacklogEntry existingEntry = backlogEntryDao.getByUserAndMedia(user, mediaItem);
 
             if (existingEntry != null) {
-                // Entry exists → redirect to backlog page instead of inserting duplicate
                 response.sendRedirect("backlog");
-                return; // important to stop further processing
+                return;
             } else {
-                // Entry does not exist → create new
                 entry = new BacklogEntry();
                 entry.setUser(user);
                 entry.setMediaItem(mediaItem);
@@ -178,16 +188,13 @@ public class EditBacklogServlet extends HttpServlet {
             }
         }
 
-
         entry.setStatus(statusParam != null ? BacklogStatus.valueOf(statusParam) : BacklogStatus.PLANNED);
         entry.setUserRating(userRatingParam != null && !userRatingParam.isEmpty() ? Integer.parseInt(userRatingParam) : null);
         entry.setNotes(notesParam);
 
         if (entryIdParam != null && !entryIdParam.isEmpty()) {
-            // existing entry → update
             backlogEntryDao.update(entry);
         } else {
-            // new entry → insert
             backlogEntryDao.insert(entry);
         }
 

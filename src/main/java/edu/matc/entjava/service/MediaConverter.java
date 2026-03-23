@@ -35,6 +35,12 @@ public class MediaConverter {
         return tvShow;
     }
 
+    /**
+     * Convert to movie movie.
+     *
+     * @param item the item
+     * @return the movie
+     */
     public Movie convertToMovie(MovieItem item) {
         Movie movie = new Movie();
 
