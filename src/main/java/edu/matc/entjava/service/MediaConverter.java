@@ -5,8 +5,17 @@ import edu.matc.entjava.entity.TvShow;
 import edu.matc.entjava.org.themoviedb.MovieItem;
 import edu.matc.entjava.org.themoviedb.TVItem;
 
+/**
+ * The type Media converter.
+ */
 public class MediaConverter {
 
+    /**
+     * Convert to tv show tv show.
+     *
+     * @param item the item
+     * @return the tv show
+     */
     public TvShow convertToTvShow(TVItem item) {
         TvShow tvShow = new TvShow();
 
@@ -26,6 +35,12 @@ public class MediaConverter {
         return tvShow;
     }
 
+    /**
+     * Convert to movie movie.
+     *
+     * @param item the item
+     * @return the movie
+     */
     public Movie convertToMovie(MovieItem item) {
         Movie movie = new Movie();
 

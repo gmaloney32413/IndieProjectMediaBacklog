@@ -11,6 +11,11 @@ import org.hibernate.query.criteria.HibernateCriteriaBuilder;
 
 import java.util.List;
 
+/**
+ * The type Generic dao.
+ *
+ * @param <T> the type parameter
+ */
 public class GenericDao<T> {
 
     private final Logger logger = LogManager.getLogger(this.getClass());
@@ -18,10 +23,21 @@ public class GenericDao<T> {
             SessionFactoryProvider.getSessionFactory();
     private Class<T> type;
 
+    /**
+     * Instantiates a new Generic dao.
+     *
+     * @param type the type
+     */
     public GenericDao(Class<T> type) {
         this.type = type;
     }
 
+    /**
+     * Gets by id.
+     *
+     * @param id the id
+     * @return the by id
+     */
     public T getById(Long id) {
         Session session = sessionFactory.openSession();
         T entity = session.get(type, id);
@@ -29,6 +45,11 @@ public class GenericDao<T> {
         return entity;
     }
 
+    /**
+     * Gets all.
+     *
+     * @return the all
+     */
     public List<T> getAll() {
         Session session = sessionFactory.openSession();
 
@@ -43,6 +64,12 @@ public class GenericDao<T> {
         return list;
     }
 
+    /**
+     * Insert long.
+     *
+     * @param entity the entity
+     * @return the long
+     */
     public Long insert(T entity) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -54,6 +81,11 @@ public class GenericDao<T> {
         return id;
     }
 
+    /**
+     * Update.
+     *
+     * @param entity the entity
+     */
     public void update(T entity) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -64,6 +96,11 @@ public class GenericDao<T> {
         session.close();
     }
 
+    /**
+     * Delete.
+     *
+     * @param entity the entity
+     */
     public void delete(T entity) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -74,6 +111,13 @@ public class GenericDao<T> {
         session.close();
     }
 
+    /**
+     * Gets by property equal.
+     *
+     * @param propertyName the property name
+     * @param value        the value
+     * @return the by property equal
+     */
     public List<T> getByPropertyEqual(String propertyName, Object value) {
 
         Session session = sessionFactory.openSession();

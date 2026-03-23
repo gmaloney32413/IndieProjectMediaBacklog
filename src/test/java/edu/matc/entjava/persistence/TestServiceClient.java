@@ -11,8 +11,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
+/**
+ * The type Test service client.
+ */
 public class TestServiceClient {
 
+    /**
+     * Testswapi json.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testswapiJSON() throws Exception {
         Client client = ClientBuilder.newClient();

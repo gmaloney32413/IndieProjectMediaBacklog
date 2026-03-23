@@ -19,6 +19,19 @@
 
     <p>BacklogEntries size: ${backlogEntries.size()}</p>
 
+    <section id="search-backlog">
+        <h2>Search My Backlog</h2>
+
+        <form method="get" action="backlog">
+            <input type="text"
+                   name="searchQuery"
+                   value="${param.searchQuery}"
+                   placeholder="Search your backlog">
+
+            <button type="submit">Search</button>
+        </form>
+    </section>
+
     <table border="1" id="backlog-table">
         <thead>
         <tr>

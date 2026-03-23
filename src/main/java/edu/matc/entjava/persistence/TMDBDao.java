@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.matc.entjava.org.themoviedb.MediaPage;
 import edu.matc.entjava.org.themoviedb.MovieItem;
 import edu.matc.entjava.org.themoviedb.TVItem;
+import edu.matc.entjava.utilities.PropertiesLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,13 +16,18 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * The type Tmdb dao.
  */
-public class TMDBDao {
+public class TMDBDao implements PropertiesLoader {
 
     private final Logger logger = LogManager.getLogger(this.getClass());
+    private Properties properties = loadProperties("/tmdb.properties");
+
+    private String apiKey = properties.getProperty("tmdb.api.key");
+    private String baseUrl = properties.getProperty("tmdb.base.url");
 
     /**
      * Gets page.
@@ -32,8 +38,8 @@ public class TMDBDao {
         Client client = ClientBuilder.newClient();
         //TODO Read in uri from a properties file
         WebTarget target =
-                client.target("https://api.themoviedb.org/3/trending/all/week")
-                        .queryParam("api_key", "94e4d20dd642f4bf70833b534e35b1bf");
+                client.target(baseUrl + "/trending/all/week")
+                        .queryParam("api_key", apiKey);
         String response = target.request(MediaType.APPLICATION_JSON).get(String.class);
 
         //Mapping objects from the api
@@ -59,8 +65,8 @@ public class TMDBDao {
         Client client = ClientBuilder.newClient();
         //TODO Read in uri from a properties file
         WebTarget target =
-                client.target("https://api.themoviedb.org/3/trending/movie/week")
-                        .queryParam("api_key", "94e4d20dd642f4bf70833b534e35b1bf");
+                client.target(baseUrl + "/trending/movie/week")
+                        .queryParam("api_key", apiKey);
         String response = target.request(MediaType.APPLICATION_JSON).get(String.class);
 
         //Mapping objects from the api
@@ -86,8 +92,8 @@ public class TMDBDao {
         Client client = ClientBuilder.newClient();
         //TODO Read in uri from a properties file
         WebTarget target =
-                client.target("https://api.themoviedb.org/3/trending/tv/week")
-                        .queryParam("api_key", "94e4d20dd642f4bf70833b534e35b1bf");
+                client.target(baseUrl + "/trending/tv/week")
+                        .queryParam("api_key", apiKey);
         String response = target.request(MediaType.APPLICATION_JSON).get(String.class);
 
         //Mapping objects from the api
@@ -119,13 +125,13 @@ public class TMDBDao {
 
         switch (type.toLowerCase()) {
             case "movie":
-                target = client.target("https://api.themoviedb.org/3/search/movie")
-                        .queryParam("api_key", "94e4d20dd642f4bf70833b534e35b1bf")
+                target = client.target(baseUrl + "/search/movie")
+                        .queryParam("api_key", apiKey)
                         .queryParam("query", query);
                 break;
             case "tv":
-                target = client.target("https://api.themoviedb.org/3/search/tv")
-                        .queryParam("api_key", "94e4d20dd642f4bf70833b534e35b1bf")
+                target = client.target(baseUrl + "/search/tv")
+                        .queryParam("api_key", apiKey)
                         .queryParam("query", query);
                 break;
             default: // any
@@ -152,11 +158,17 @@ public class TMDBDao {
         }
     }
 
+    /**
+     * Search tv list.
+     *
+     * @param query the query
+     * @return the list
+     */
     public List<TVItem> searchTv(String query) {
         Client client = ClientBuilder.newClient();
         WebTarget target = client
-                .target("https://api.themoviedb.org/3/search/tv")
-                .queryParam("api_key", "94e4d20dd642f4bf70833b534e35b1bf")
+                .target(baseUrl + "/search/tv")
+                .queryParam("api_key", apiKey)
                 .queryParam("query", query);
 
         String response = target.request(MediaType.APPLICATION_JSON).get(String.class);
@@ -175,11 +187,17 @@ public class TMDBDao {
         }
     }
 
+    /**
+     * Search movies list.
+     *
+     * @param query the query
+     * @return the list
+     */
     public List<MovieItem> searchMovies(String query) {
         Client client = ClientBuilder.newClient();
         WebTarget target = client
-                .target("https://api.themoviedb.org/3/search/movie")
-                .queryParam("api_key", "94e4d20dd642f4bf70833b534e35b1bf")
+                .target(baseUrl + "/search/movie")
+                .queryParam("api_key", apiKey)
                 .queryParam("query", query);
 
         String response = target.request(MediaType.APPLICATION_JSON).get(String.class);

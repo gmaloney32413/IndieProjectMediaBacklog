@@ -11,7 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * The type Backlog servlet.
+ */
 @WebServlet("/backlog")
 public class BacklogServlet extends HttpServlet {
 
@@ -47,6 +51,17 @@ public class BacklogServlet extends HttpServlet {
          */
 
         List<BacklogEntry> backlogEntries = backlogDao.getByPropertyEqual("user", user);
+
+        // Get search query
+        String searchQuery = request.getParameter("searchQuery");
+
+        if (searchQuery != null && !searchQuery.isBlank()) {
+            backlogEntries = backlogEntries.stream()
+                    .filter(entry -> entry.getMediaItem().getTitle()
+                            .toLowerCase()
+                            .contains(searchQuery.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
 
         // Add the list to the request
         request.setAttribute("backlogEntries", backlogEntries);

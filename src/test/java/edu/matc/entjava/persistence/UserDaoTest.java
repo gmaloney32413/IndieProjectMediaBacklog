@@ -10,8 +10,18 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * The type User dao test.
+ */
 class UserDaoTest {
+    /**
+     * The User dao.
+     */
     GenericDao<User> userDao;
+
+    /**
+     * Sets up.
+     */
     @BeforeEach
     void setUp() {
         Database database = Database.getInstance();
@@ -21,6 +31,9 @@ class UserDaoTest {
 
     }
 
+    /**
+     * Gets by id.
+     */
     @Test
     void getById() {
         User user = userDao.getById(1L);
@@ -32,6 +45,9 @@ class UserDaoTest {
         assertEquals("Alice Johnson", user.getName());
     }
 
+    /**
+     * Update.
+     */
     @Test
     void update() {
         User user = userDao.getById(1L);
@@ -44,6 +60,9 @@ class UserDaoTest {
         assertEquals("updated@email.com", updatedUser.getEmail());
     }
 
+    /**
+     * Insert.
+     */
     @Test
     void insert() {
         User newUser = new User(
@@ -66,6 +85,9 @@ class UserDaoTest {
         assertEquals("New User", insertedUser.getName());
     }
 
+    /**
+     * Delete.
+     */
     @Test
     void delete() {
         User user = userDao.getById(3L);
@@ -77,6 +99,9 @@ class UserDaoTest {
         assertNull(deletedUser);
     }
 
+    /**
+     * Gets all.
+     */
     @Test
     void getAll() {
         List<User> users = userDao.getAll();
@@ -84,6 +109,9 @@ class UserDaoTest {
         assertEquals(3, users.size());
     }
 
+    /**
+     * Gets by cognito sub.
+     */
     @Test
     void getByCognitoSub() {
         List<User> users = userDao.getByPropertyEqual("cognitoSub", "11111111-1111-1111-1111-111111111111");
@@ -95,6 +123,9 @@ class UserDaoTest {
     }
 
 
+    /**
+     * Gets by cognito sub not found.
+     */
     @Test
     void getByCognitoSubNotFound() {
         List<User> users = userDao.getByPropertyEqual("cognitoSub", "non-existent-sub");
@@ -102,6 +133,9 @@ class UserDaoTest {
         assertNull(user);
     }
 
+    /**
+     * Gets or create user existing user.
+     */
     @Test
     void getOrCreateUser_existingUser() {
         List<User> users = userDao.getByPropertyEqual(
@@ -126,6 +160,9 @@ class UserDaoTest {
         assertEquals(3, users.size());
     }
 
+    /**
+     * Gets or create user new user.
+     */
     @Test
     void getOrCreateUser_newUser() {
         List<User> users = userDao.getByPropertyEqual(
@@ -150,6 +187,9 @@ class UserDaoTest {
     }
 
 
+    /**
+     * Delete backlog entry does not delete user.
+     */
     @Test
     void deleteBacklogEntryDoesNotDeleteUser() {
         BacklogEntryDao entryDao = new BacklogEntryDao();
@@ -164,6 +204,9 @@ class UserDaoTest {
     }
 
 
+    /**
+     * Delete user also deletes backlog entries.
+     */
     @Test
     void deleteUserAlsoDeletesBacklogEntries() {
         User user = userDao.getById(1L);

@@ -12,11 +12,17 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * The type Backlog entry dao test.
+ */
 class BacklogEntryDaoTest {
     private GenericDao<BacklogEntry> backlogDao;
     private GenericDao<User> userDao;
     private GenericDao<MediaItem> mediaItemDao;
 
+    /**
+     * Sets up.
+     */
     @BeforeEach
     void setUp() {
         Database database = Database.getInstance();
@@ -27,6 +33,9 @@ class BacklogEntryDaoTest {
         mediaItemDao = new GenericDao<>(MediaItem.class);
     }
 
+    /**
+     * Gets by id.
+     */
     @Test
     void getById() {
         BacklogEntry entry = backlogDao.getById(1L);
@@ -37,6 +46,9 @@ class BacklogEntryDaoTest {
         assertEquals(10, entry.getUserRating().intValue());
     }
 
+    /**
+     * Gets all.
+     */
     @Test
     void getAll() {
         List<BacklogEntry> entries = backlogDao.getAll();
@@ -44,6 +56,9 @@ class BacklogEntryDaoTest {
         assertEquals(7, entries.size());
     }
 
+    /**
+     * Gets by user id.
+     */
     @Test
     void getByUserId() {
         List<BacklogEntry> aliceEntries = backlogDao.getByPropertyEqual("user", userDao.getById(1L));
@@ -51,6 +66,9 @@ class BacklogEntryDaoTest {
         assertEquals(3, aliceEntries.size());
     }
 
+    /**
+     * Gets by user and media.
+     */
     @Test
     void getByUserAndMedia() {
         Long userId = 1L;
@@ -66,6 +84,9 @@ class BacklogEntryDaoTest {
         assertEquals(BacklogStatus.COMPLETED, entry.getStatus());
     }
 
+    /**
+     * Count by status for user.
+     */
     @Test
     void countByStatusForUser() {
         Long userId = 2L;
@@ -76,6 +97,9 @@ class BacklogEntryDaoTest {
         assertEquals(2L, completedCount.intValue());
     }
 
+    /**
+     * Insert.
+     */
     @Test
     void insert() {
         User user = userDao.getById(1L);
@@ -98,6 +122,9 @@ class BacklogEntryDaoTest {
         assertEquals("Test insert", inserted.getNotes());
     }
 
+    /**
+     * Update.
+     */
     @Test
     void update() {
         BacklogEntry entry = backlogDao.getById(1L);
@@ -113,6 +140,9 @@ class BacklogEntryDaoTest {
         assertEquals(8, updated.getUserRating().intValue());
     }
 
+    /**
+     * Delete.
+     */
     @Test
     void delete() {
         BacklogEntry entry = backlogDao.getById(7L);
@@ -124,6 +154,9 @@ class BacklogEntryDaoTest {
         assertNull(deleted);
     }
 
+    /**
+     * Delete backlog entry does not delete user or media.
+     */
     @Test
     void deleteBacklogEntryDoesNotDeleteUserOrMedia() {
         BacklogEntry entry = backlogDao.getById(1L);
@@ -143,6 +176,9 @@ class BacklogEntryDaoTest {
     }
 
 
+    /**
+     * Delete user also deletes backlog entries.
+     */
     @Test
     void deleteUserAlsoDeletesBacklogEntries() {
         User user = userDao.getById(1L); // Alice

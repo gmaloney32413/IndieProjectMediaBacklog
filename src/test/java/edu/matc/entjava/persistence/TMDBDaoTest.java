@@ -109,6 +109,9 @@ class TMDBDaoTest {
         assertFalse(page.getResults().isEmpty(), "Results list should not be empty");
     }
 
+    /**
+     * Search tv returns results.
+     */
     @Test
     void searchTvReturnsResults() {
         List<TVItem> results = dao.searchTv("one piece");
@@ -121,6 +124,9 @@ class TMDBDaoTest {
         assertNotNull(firstItem.getName(), "TVItem should have a name");
     }
 
+    /**
+     * Search movies returns results.
+     */
     @Test
     void searchMoviesReturnsResults() {
         List<MovieItem> results = dao.searchMovies("avengers");
@@ -134,6 +140,9 @@ class TMDBDaoTest {
         //assertEquals(firstItem.getTitle(), "ONE PIECE");
     }
 
+    /**
+     * Search movie type returns movie items.
+     */
     @Test
     void searchMovieTypeReturnsMovieItems() {
         List<TVItem> results = dao.search("avengers", "movie");
@@ -141,6 +150,9 @@ class TMDBDaoTest {
         assertFalse(results.isEmpty());
     }
 
+    /**
+     * Search tv type returns tv items.
+     */
     @Test
     void searchTvTypeReturnsTvItems() {
         List<TVItem> results = dao.search("one piece", "tv");
@@ -151,6 +163,9 @@ class TMDBDaoTest {
         assertNotNull(firstItem.getName(), "TVItem should have a name");
     }
 
+    /**
+     * Search any type combines results.
+     */
     @Test
     void searchAnyTypeCombinesResults() {
         List<TVItem> results = dao.search("one piece", "any");

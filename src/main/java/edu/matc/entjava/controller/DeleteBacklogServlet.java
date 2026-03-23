@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The type Delete backlog servlet.
+ */
 @WebServlet("/deleteBacklog")
 public class DeleteBacklogServlet extends HttpServlet {
 

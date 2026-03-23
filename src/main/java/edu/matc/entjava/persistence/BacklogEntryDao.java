@@ -7,13 +7,32 @@ import edu.matc.entjava.entity.User;
 
 import java.util.List;
 
+/**
+ * The type Backlog entry dao.
+ */
 public class BacklogEntryDao extends GenericDao<BacklogEntry> {
+    /**
+     * Instantiates a new Backlog entry dao.
+     */
     public BacklogEntryDao() { super(BacklogEntry.class); }
 
+    /**
+     * Gets by user.
+     *
+     * @param user the user
+     * @return the by user
+     */
     public List<BacklogEntry> getByUser(User user) {
         return getByPropertyEqual("user", user);
     }
 
+    /**
+     * Gets by user and media.
+     *
+     * @param user      the user
+     * @param mediaItem the media item
+     * @return the by user and media
+     */
     public BacklogEntry getByUserAndMedia(User user, MediaItem mediaItem) {
         return getByPropertyEqual("user", user).stream()
                 .filter(b -> b.getMediaItem().equals(mediaItem))

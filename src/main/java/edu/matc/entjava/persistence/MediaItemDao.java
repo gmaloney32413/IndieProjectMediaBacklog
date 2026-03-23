@@ -17,6 +17,9 @@ public class MediaItemDao extends GenericDao<MediaItem> {
 
     private final SessionFactory sessionFactory;
 
+    /**
+     * Instantiates a new Media item dao.
+     */
     public MediaItemDao() {
         super(MediaItem.class);
         sessionFactory = SessionFactoryProvider.getSessionFactory();
@@ -24,6 +27,9 @@ public class MediaItemDao extends GenericDao<MediaItem> {
 
     /**
      * Search MediaItems by title (case-insensitive)
+     *
+     * @param searchTerm the search term
+     * @return the list
      */
     public List<MediaItem> searchByTitle(String searchTerm) {
         try (Session session = sessionFactory.openSession()) {
@@ -44,6 +50,10 @@ public class MediaItemDao extends GenericDao<MediaItem> {
 
     /**
      * Search MediaItems by title and mediaType (case-insensitive)
+     *
+     * @param searchTerm the search term
+     * @param mediaType  the media type
+     * @return the list
      */
     public List<MediaItem> searchByTitleAndType(String searchTerm, String mediaType) {
         try (Session session = sessionFactory.openSession()) {

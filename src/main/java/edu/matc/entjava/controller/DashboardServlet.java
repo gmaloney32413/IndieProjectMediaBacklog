@@ -20,6 +20,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Dashboard servlet.
+ */
 @WebServlet("/dashboard")
 public class DashboardServlet extends HttpServlet {
 
@@ -80,11 +83,28 @@ public class DashboardServlet extends HttpServlet {
                     break;
             }
         } else {
-            // NEW: fetch trending movies and TV shows when no search query
-            tmdbDao.getMoviePage().getResults()
-                    .forEach(item -> mediaItems.add(converter.convertToMovie(item)));
-            tmdbDao.getTVPage().getResults()
-                    .forEach(item -> mediaItems.add(converter.convertToTvShow(item)));
+            if (searchType == null) searchType = "any";
+
+            switch (searchType.toLowerCase()) {
+
+                case "movie":
+                    tmdbDao.getMoviePage().getResults()
+                            .forEach(item -> mediaItems.add(converter.convertToMovie(item)));
+                    break;
+
+                case "tv":
+                    tmdbDao.getTVPage().getResults()
+                            .forEach(item -> mediaItems.add(converter.convertToTvShow(item)));
+                    break;
+
+                default:
+                    tmdbDao.getMoviePage().getResults()
+                            .forEach(item -> mediaItems.add(converter.convertToMovie(item)));
+
+                    tmdbDao.getTVPage().getResults()
+                            .forEach(item -> mediaItems.add(converter.convertToTvShow(item)));
+                    break;
+            }
         }
 
 

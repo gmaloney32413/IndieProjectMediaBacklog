@@ -11,9 +11,18 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * The type Media item dao test.
+ */
 class MediaItemDaoTest {
+    /**
+     * The Media item dao.
+     */
     MediaItemDao mediaItemDao;
 
+    /**
+     * Sets up.
+     */
     @BeforeEach
     void setUp() {
         Database database = Database.getInstance();
@@ -22,6 +31,9 @@ class MediaItemDaoTest {
         mediaItemDao = new MediaItemDao();
     }
 
+    /**
+     * Gets by id.
+     */
     @Test
     void getById() {
         MediaItem item = mediaItemDao.getById(1L); // Inception
@@ -31,6 +43,9 @@ class MediaItemDaoTest {
         assertEquals("A thief steals corporate secrets through dream-sharing technology.", item.getOverview());
     }
 
+    /**
+     * Gets all.
+     */
     @Test
     void getAll() {
         List<MediaItem> items = mediaItemDao.getAll();
@@ -39,6 +54,9 @@ class MediaItemDaoTest {
         assertEquals(7, items.size());
     }
 
+    /**
+     * Search by title.
+     */
     @Test
     void searchByTitle() {
         List<MediaItem> results = mediaItemDao.searchByTitle("the");
@@ -49,6 +67,9 @@ class MediaItemDaoTest {
         assertTrue(results.stream().anyMatch(item -> item.getTitle().equals("The Office (TV)")));
     }
 
+    /**
+     * Insert.
+     */
     @Test
     void insert() {
         Movie newMovie = new Movie();
@@ -69,6 +90,9 @@ class MediaItemDaoTest {
         assertEquals("A test movie overview", inserted.getOverview());
     }
 
+    /**
+     * Update.
+     */
     @Test
     void update() {
         MediaItem item = mediaItemDao.getById(1L); // Inception
@@ -80,6 +104,9 @@ class MediaItemDaoTest {
         assertEquals("Inception Updated", updated.getTitle());
     }
 
+    /**
+     * Delete.
+     */
     @Test
     void delete() {
         MediaItem item = mediaItemDao.getById(7L); // The Office (TV)
@@ -90,6 +117,9 @@ class MediaItemDaoTest {
         assertNull(deleted);
     }
 
+    /**
+     * Search by title and type movie filter.
+     */
     @Test
     void searchByTitleAndType_movieFilter() {
         List<MediaItem> results = mediaItemDao.searchByTitleAndType("the", "movie");
@@ -104,6 +134,9 @@ class MediaItemDaoTest {
         assertFalse(results.stream().anyMatch(item -> item.getTitle().equals("The Office (TV)")));
     }
 
+    /**
+     * Search by title and type tv filter.
+     */
     @Test
     void searchByTitleAndType_tvFilter() {
         List<MediaItem> results = mediaItemDao.searchByTitleAndType("office", "tv");
@@ -112,6 +145,9 @@ class MediaItemDaoTest {
         assertEquals("The Office (TV)", results.get(0).getTitle());
     }
 
+    /**
+     * Search by title and type any type.
+     */
     @Test
     void searchByTitleAndType_anyType() {
         List<MediaItem> results = mediaItemDao.searchByTitleAndType("the", "any");
