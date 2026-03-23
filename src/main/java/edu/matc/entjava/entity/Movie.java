@@ -58,4 +58,6 @@ public class Movie extends MediaItem{
     public void setRating(String rating) {
         this.rating = rating;
     }
+
+
 }

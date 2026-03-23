@@ -136,9 +136,14 @@ public class EditBacklogServlet extends HttpServlet {
             if (mediaItem == null) {
                 if ("movie".equalsIgnoreCase(mediaType)) {
                     mediaItem = new edu.matc.entjava.entity.Movie();
-                } else if ("tv".equalsIgnoreCase(mediaType)) {
+                } else if ("tv".equalsIgnoreCase(mediaType) || "tv_show".equalsIgnoreCase(mediaType)) {
                     mediaItem = new edu.matc.entjava.entity.TvShow();
                 }
+
+                if (mediaItem == null) {
+                    throw new ServletException("Cannot create MediaItem — mediaType missing or invalid");
+                }
+
                 mediaItem.setTmdbId(tmdbId);
                 mediaItem.setTitle(title);
                 mediaItem.setOverview(overview);
@@ -153,6 +158,9 @@ public class EditBacklogServlet extends HttpServlet {
         BacklogEntry entry;
         if (entryIdParam != null && !entryIdParam.isEmpty()) {
             entry = backlogEntryDao.getById(Long.parseLong(entryIdParam));
+            if (entry == null) {
+                throw new ServletException("BacklogEntry not found for ID: " + entryIdParam);
+            }
         } else {
             entry = new BacklogEntry();
             entry.setUser(user);

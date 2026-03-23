@@ -30,7 +30,7 @@ public class TvShow extends MediaItem{
 
     @Override
     public String getMediaType() {
-        return "TV Show";
+        return "tv_show"; // must match @DiscriminatorValue
     }
 
 

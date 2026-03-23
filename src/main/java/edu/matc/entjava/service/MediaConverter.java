@@ -19,9 +19,9 @@ public class MediaConverter {
             tvShow.setReleaseDate(java.sql.Date.valueOf(item.getFirstAirDate()));
         }
 
-        tvShow.setOngoing(null); // TMDb search results don't have ongoing status
-        tvShow.setNumberOfSeasons(null); // Requires details API
-        tvShow.setTotalEpisodes(null); // Requires details API
+        tvShow.setOngoing(false); // TMDb search results don't have ongoing status
+        tvShow.setNumberOfSeasons(1); // Requires details API
+        tvShow.setTotalEpisodes(1); // Requires details API
 
         return tvShow;
     }

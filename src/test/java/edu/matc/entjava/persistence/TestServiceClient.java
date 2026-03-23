@@ -35,7 +35,6 @@ public class TestServiceClient {
         //assertEquals(expectedMediaLanguage, item.getOriginalLanguage());
         //assertEquals(expectedMediaType, item.getMediaType());
 
-
         //assertEquals("???", response);
        //assertTrue(response.contains("results"));
     }
