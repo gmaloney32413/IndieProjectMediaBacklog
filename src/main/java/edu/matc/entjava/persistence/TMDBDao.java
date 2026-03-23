@@ -215,6 +215,63 @@ public class TMDBDao implements PropertiesLoader {
             return Collections.emptyList();
         }
     }
+
+
+    /**
+     * Gets movie details.
+     *
+     * @param tmdbId the tmdb id
+     * @return the movie details
+     */
+    public MovieItem getMovieDetails(long tmdbId) {
+        Client client = ClientBuilder.newClient();
+
+        try {
+            WebTarget target = client
+                    .target(baseUrl + "/movie/" + tmdbId)
+                    .queryParam("api_key", apiKey)
+                    .queryParam("append_to_response", "credits,release_dates");
+
+            String response = target.request(MediaType.APPLICATION_JSON).get(String.class);
+
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+            return mapper.readValue(response, MovieItem.class);
+
+        } catch (Exception e) {
+            logger.error("Error fetching movie details: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Gets tv details.
+     *
+     * @param tmdbId the tmdb id
+     * @return the tv details
+     */
+    public TVItem getTVDetails(long tmdbId) {
+        Client client = ClientBuilder.newClient();
+
+        try {
+            WebTarget target = client
+                    .target(baseUrl + "/tv/" + tmdbId)
+                    .queryParam("api_key", apiKey)
+                    .queryParam("append_to_response", "credits");
+
+            String response = target.request(MediaType.APPLICATION_JSON).get(String.class);
+
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+            return mapper.readValue(response, TVItem.class);
+
+        } catch (Exception e) {
+            logger.error("Error fetching TV details: " + e.getMessage());
+            return null;
+        }
+    }
 }
 
 

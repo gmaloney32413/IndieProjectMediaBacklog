@@ -28,19 +28,13 @@ public class MediaConverter {
             tvShow.setReleaseDate(java.sql.Date.valueOf(item.getFirstAirDate()));
         }
 
-        tvShow.setOngoing(false); // TMDb search results don't have ongoing status
-        tvShow.setNumberOfSeasons(1); // Requires details API
-        tvShow.setTotalEpisodes(1); // Requires details API
+        tvShow.setOngoing(item.getOngoing()); // TMDb search results don't have ongoing status
+        tvShow.setNumberOfSeasons(item.getNumberOfSeasons()); // Requires details API
+        tvShow.setTotalEpisodes(item.getTotalEpisodes()); // Requires details API
 
         return tvShow;
     }
 
-    /**
-     * Convert to movie movie.
-     *
-     * @param item the item
-     * @return the movie
-     */
     public Movie convertToMovie(MovieItem item) {
         Movie movie = new Movie();
 
@@ -53,9 +47,9 @@ public class MediaConverter {
             movie.setReleaseDate(java.sql.Date.valueOf(item.getReleaseDate()));
         }
 
-        movie.setRuntime(null);   // Requires /movie/{id} API call
-        movie.setDirector(null);  // Requires credits API
-        movie.setRating(null);    // Requires details API or certification endpoint
+        movie.setRuntime(item.getRuntime());   // Requires /movie/{id} API call
+        movie.setDirector(item.getDirector());  // Requires credits API
+        movie.setRating(item.getRating());    // Requires details API or certification endpoint
 
         return movie;
     }

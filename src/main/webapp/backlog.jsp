@@ -47,7 +47,7 @@
         <tbody>
         <!-- Media items will populate here dynamically -->
         <c:forEach var="entry" items="${backlogEntries}">
-            <tr>
+            <tr onclick="window.location.href='mediaDetails?tmdbId=${entry.mediaItem.tmdbId}&mediaType=${entry.mediaItem.mediaType}&returnPage=backlog'" style="cursor:pointer;">
                 <td>
                     <c:if test="${not empty entry.mediaItem.posterUrl}">
                         <img src="${entry.mediaItem.posterUrl}" alt="${entry.mediaItem.title}" >

@@ -10,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TVItem {
 
-
 	@JsonProperty("title")
 	private String title;
 
@@ -59,6 +58,23 @@ public class TVItem {
 	@JsonProperty("vote_count")
 	private int voteCount;
 
+	// --- NEW FIELDS ---
+	@JsonProperty("number_of_seasons")
+	private int numberOfSeasons;
+
+	@JsonProperty("number_of_episodes")
+	private int totalEpisodes;
+
+	@JsonProperty("in_production")
+	private boolean ongoing;
+
+	// --- GETTERS ---
+	public int getNumberOfSeasons() { return numberOfSeasons; }
+	public int getTotalEpisodes() { return totalEpisodes; }
+	public boolean getOngoing() { return ongoing; }
+
+	// --- Existing getters/setters (keep your previous ones) ---
+	// getName(), getTitle(), getOverview(), etc.
 	/**
 	 * Set title.
 	 *

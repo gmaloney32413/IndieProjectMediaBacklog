@@ -162,11 +162,22 @@ public class EditBacklogServlet extends HttpServlet {
                 throw new ServletException("BacklogEntry not found for ID: " + entryIdParam);
             }
         } else {
-            entry = new BacklogEntry();
-            entry.setUser(user);
-            entry.setMediaItem(mediaItem);
-            entry.setDateAdded(new java.util.Date());
+            // Check if an entry already exists for this user and media
+            BacklogEntry existingEntry = backlogEntryDao.getByUserAndMedia(user, mediaItem);
+
+            if (existingEntry != null) {
+                // Entry exists → redirect to backlog page instead of inserting duplicate
+                response.sendRedirect("backlog");
+                return; // important to stop further processing
+            } else {
+                // Entry does not exist → create new
+                entry = new BacklogEntry();
+                entry.setUser(user);
+                entry.setMediaItem(mediaItem);
+                entry.setDateAdded(new java.util.Date());
+            }
         }
+
 
         entry.setStatus(statusParam != null ? BacklogStatus.valueOf(statusParam) : BacklogStatus.PLANNED);
         entry.setUserRating(userRatingParam != null && !userRatingParam.isEmpty() ? Integer.parseInt(userRatingParam) : null);

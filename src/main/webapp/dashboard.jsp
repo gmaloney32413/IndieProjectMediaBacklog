@@ -74,7 +74,7 @@
                 <tbody>
                 <!-- Media items will populate here dynamically -->
                 <c:forEach var="item" items="${mediaItems}">
-                    <tr>
+                    <tr onclick="window.location.href='mediaDetails?tmdbId=${item.tmdbId}&mediaType=${item.mediaType}&returnPage=dashboard'" style="cursor:pointer;">
                         <td>
                             <c:if test="${not empty item.posterUrl}">
                                 <img src="${item.posterUrl}" alt="${item.title}" >

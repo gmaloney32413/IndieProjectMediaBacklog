@@ -50,7 +50,7 @@ public class Movie extends MediaItem{
 
     @Override
     public String getMediaType() {
-        return "Movie";
+        return "movie";
     }
 
     /**

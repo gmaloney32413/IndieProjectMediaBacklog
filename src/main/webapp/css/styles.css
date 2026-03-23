@@ -75,7 +75,7 @@ table tbody tr:hover {
 
 /* Posters in table */
 table img {
-    width: 80px;   /* adjust size here */
+    width: 40px;   /* adjust size here */
     height: auto;
     border-radius: 4px;
 }

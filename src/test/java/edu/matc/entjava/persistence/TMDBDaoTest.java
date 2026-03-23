@@ -174,4 +174,60 @@ class TMDBDaoTest {
         assertTrue(results.size() > 1, "Results should combine movie and tv results");
     }
 
+
+    /**
+     * Test getting details for a specific movie by ID.
+     */
+    @Test
+    void getMovieDetailsSuccess() {
+        // You can pick a known movie ID from TMDB
+        int movieId = 603; // The Matrix as an example
+
+        MovieItem movie = dao.getMovieDetails(movieId);
+
+        assertNotNull(movie, "Movie details should not be null");
+        assertEquals(movieId, movie.getId(), "Movie ID should match");
+        assertNotNull(movie.getTitle(), "Movie should have a title");
+        assertTrue(movie.getOverview() != null && !movie.getOverview().isEmpty(), "Movie should have an overview");
+        assertTrue(movie.getReleaseDate() != null, "Movie should have a release date");
+        assertTrue(movie.getRuntime() > 0, "Movie runtime should be positive");
+    }
+
+    /**
+     * Test getting details for a specific TV show by ID.
+     */
+    @Test
+    void getTvDetailsSuccess() {
+        // You can pick a known TV ID from TMDB
+        int tvId = 1396; // Example: "Breaking Bad"
+
+        TVItem tv = dao.getTVDetails(tvId);
+
+        assertNotNull(tv, "TV show details should not be null");
+        assertEquals(tvId, tv.getId(), "TV ID should match");
+        assertNotNull(tv.getName(), "TV show should have a name");
+        assertTrue(tv.getOverview() != null && !tv.getOverview().isEmpty(), "TV show should have an overview");
+        assertTrue(tv.getNumberOfSeasons() > 0, "TV show should have at least one season");
+        assertTrue(tv.getTotalEpisodes() > 0, "TV show should have at least one episode");
+    }
+
+    /**
+     * Test that invalid movie ID returns null or throws an exception.
+     */
+    @Test
+    void getMovieDetailsInvalidId() {
+        int invalidMovieId = -1;
+        MovieItem movie = dao.getMovieDetails(invalidMovieId);
+        assertNull(movie, "Invalid movie ID should return null");
+    }
+
+    /**
+     * Test that invalid TV ID returns null or throws an exception.
+     */
+    @Test
+    void getTvDetailsInvalidId() {
+        int invalidTvId = -1;
+        TVItem tv = dao.getTVDetails(invalidTvId);
+        assertNull(tv, "Invalid TV ID should return null");
+    }
 }

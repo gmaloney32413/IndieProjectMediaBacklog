@@ -1,11 +1,17 @@
 package edu.matc.entjava.org.themoviedb;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * The type Movie item.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MovieItem {
 
 	@JsonProperty("overview")
@@ -52,6 +58,76 @@ public class MovieItem {
 
 	@JsonProperty("vote_count")
 	private int voteCount;
+
+	// --- NEW FIELDS ---
+	@JsonProperty("runtime")
+	private int runtime;
+
+	@JsonProperty("credits")
+	private Credits credits;
+
+	@JsonProperty("release_dates")
+	private ReleaseDates releaseDates;
+
+	public int getRuntime() { return runtime; }
+
+	public String getDirector() {
+		if (credits != null && credits.crew != null) {
+			for (CrewMember c : credits.crew) {
+				if ("Director".equalsIgnoreCase(c.job)) {
+					return c.name;
+				}
+			}
+		}
+		return null;
+	}
+
+	public String getRating() {
+		if (releaseDates != null && releaseDates.results != null) {
+			for (ReleaseCountry r : releaseDates.results) {
+				if ("US".equalsIgnoreCase(r.iso_3166_1) && r.release_dates != null) {
+					for (ReleaseDateDetail d : r.release_dates) {
+						if (d.certification != null && !d.certification.isEmpty()) {
+							return d.certification;
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	// --- Nested Classes for JSON mapping ---
+	public static class Credits {
+		@JsonProperty("crew")
+		public List<CrewMember> crew;
+	}
+
+	public static class CrewMember {
+		@JsonProperty("job")
+		public String job;
+
+		@JsonProperty("name")
+		public String name;
+	}
+
+	public static class ReleaseDates {
+		@JsonProperty("results")
+		public List<ReleaseCountry> results;
+	}
+
+	public static class ReleaseCountry {
+		@JsonProperty("iso_3166_1")
+		public String iso_3166_1;
+
+		@JsonProperty("release_dates")
+		public List<ReleaseDateDetail> release_dates;
+	}
+
+	public static class ReleaseDateDetail {
+		@JsonProperty("certification")
+		public String certification;
+	}
 
 	/**
 	 * Set overview.
@@ -325,23 +401,23 @@ public class MovieItem {
 
 	@Override
  	public String toString(){
-		return 
-			"ResultsItem{" + 
-			"overview = '" + overview + '\'' + 
-			",original_language = '" + originalLanguage + '\'' + 
-			",original_title = '" + originalTitle + '\'' + 
-			",video = '" + video + '\'' + 
-			",title = '" + title + '\'' + 
-			",genre_ids = '" + genreIds + '\'' + 
-			",poster_path = '" + posterPath + '\'' + 
-			",backdrop_path = '" + backdropPath + '\'' + 
-			",media_type = '" + mediaType + '\'' + 
-			",release_date = '" + releaseDate + '\'' + 
-			",popularity = '" + popularity + '\'' + 
-			",vote_average = '" + voteAverage + '\'' + 
-			",id = '" + id + '\'' + 
-			",adult = '" + adult + '\'' + 
-			",vote_count = '" + voteCount + '\'' + 
+		return
+			"ResultsItem{" +
+			"overview = '" + overview + '\'' +
+			",original_language = '" + originalLanguage + '\'' +
+			",original_title = '" + originalTitle + '\'' +
+			",video = '" + video + '\'' +
+			",title = '" + title + '\'' +
+			",genre_ids = '" + genreIds + '\'' +
+			",poster_path = '" + posterPath + '\'' +
+			",backdrop_path = '" + backdropPath + '\'' +
+			",media_type = '" + mediaType + '\'' +
+			",release_date = '" + releaseDate + '\'' +
+			",popularity = '" + popularity + '\'' +
+			",vote_average = '" + voteAverage + '\'' +
+			",id = '" + id + '\'' +
+			",adult = '" + adult + '\'' +
+			",vote_count = '" + voteCount + '\'' +
 			"}";
 		}
 }
