@@ -12,6 +12,7 @@
 <header>
     <nav>
         <c:import url="/includes/navbar.jsp"/>
+
     </nav>
 </header>
 <main>
@@ -50,7 +51,7 @@
             <tr onclick="window.location.href='mediaDetails?tmdbId=${entry.mediaItem.tmdbId}&mediaType=${entry.mediaItem.mediaType}&returnPage=backlog'" style="cursor:pointer;">
                 <td>
                     <c:if test="${not empty entry.mediaItem.posterUrl}">
-                        <img src="${entry.mediaItem.posterUrl}" alt="${entry.mediaItem.title}" >
+                        <img class="poster-img" src="${entry.mediaItem.posterUrl}" alt="${entry.mediaItem.title}" >
                     </c:if>
                 </td>
                 <td>${entry.mediaItem.title}</td>

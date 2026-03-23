@@ -77,7 +77,7 @@
                     <tr onclick="window.location.href='mediaDetails?tmdbId=${item.tmdbId}&mediaType=${item.mediaType}&returnPage=dashboard'" style="cursor:pointer;">
                         <td>
                             <c:if test="${not empty item.posterUrl}">
-                                <img src="${item.posterUrl}" alt="${item.title}" >
+                                <img class="poster-img" src="${item.posterUrl}" alt="${item.title}" >
                             </c:if>
                         </td>
                         <td>${item.title}</td>

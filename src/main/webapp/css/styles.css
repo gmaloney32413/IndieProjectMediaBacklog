@@ -5,6 +5,18 @@
     padding: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
+/* Standard poster images */
+.poster-img {
+    width: auto;          /* don’t force 100% */
+    max-width: 50px;     /* smaller max width */
+    height: auto;
+    border-radius: 4px;
+    object-fit: cover;
+    display: block;       /* remove inline behavior issues */
+}
+
+
 body {
 
 }
@@ -73,12 +85,6 @@ table tbody tr:hover {
     background-color: #007bff;
 }
 
-/* Posters in table */
-table img {
-    width: 40px;   /* adjust size here */
-    height: auto;
-    border-radius: 4px;
-}
 
 /* Forms */
 form {
@@ -125,12 +131,7 @@ form button:hover {
     text-align: center;
 }
 
-.search-item img {
-    width: 150px;
-    height: auto;
-    border-radius: 4px;
-    margin-bottom: 8px;
-}
+
 
 .search-item h3 {
     font-size: 1rem;
@@ -203,3 +204,72 @@ footer {
         gap: 8px;
     }
 }
+
+/* Media Details Card */
+.media-card {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    margin: 20px auto;
+    max-width: 900px;
+    overflow: hidden;
+}
+
+.media-poster {
+    flex: 0 0 auto; /* keep poster from stretching too much */
+}
+
+.media-info {
+    flex: 1;
+    padding: 20px;
+}
+
+.media-info h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #007bff;
+}
+
+.media-info p {
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+
+.media-info .overview {
+    font-style: italic;
+    color: #555;
+}
+
+.back-link {
+    margin-top: 20px;
+}
+
+.back-link a.btn {
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px 15px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.back-link a.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .media-card {
+        flex-direction: column;
+    }
+
+    .media-info h2 {
+        font-size: 1.5rem;
+    }
+}
+
+
+
+
