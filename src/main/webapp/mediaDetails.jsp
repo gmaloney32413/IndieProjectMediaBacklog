@@ -14,7 +14,7 @@
     <div class="media-card">
         <div class="media-poster">
             <c:if test="${not empty mediaItem.posterUrl}">
-                <img class="poster-img" src="${mediaItem.posterUrl}" alt="${mediaItem.title}" />
+                <img class="poster-img-media" src="${mediaItem.posterUrl}" alt="${mediaItem.title}" />
             </c:if>
         </div>
 

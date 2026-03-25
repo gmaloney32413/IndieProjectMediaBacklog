@@ -9,7 +9,17 @@
 /* Standard poster images */
 .poster-img {
     width: auto;          /* don’t force 100% */
-    max-width: 50px;     /* smaller max width */
+    max-width: 75px;     /* smaller max width */
+    height: auto;
+    border-radius: 4px;
+    object-fit: cover;
+    display: block;       /* remove inline behavior issues */
+}
+
+/* Standard poster images */
+.poster-img-media {
+    width: auto;          /* don’t force 100% */
+    max-width: 150px;     /* smaller max width */
     height: auto;
     border-radius: 4px;
     object-fit: cover;

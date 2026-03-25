@@ -27,17 +27,22 @@ Indie Project: 6 hours
 - aws setup
 
 Week 7
-Indie project: 7
+Indie project: 7 hours
 - added cognito files 
-- created user pool and
-
-
-
-Week 8
-Indie project: 10
-- implemeted tmdb api and tested connection
-- created genericdao for common methods in other dao classes
+- created user pool and set up client connection to elastic beanstalk
+- corrected javadoc
 - 
 
 
+Week 8
+Indie project: 9 hours
+- implemeted tmdb api and tested connection
+- created genericdao for common methods in other dao classes
+- reworked dashbpard to display tmdb data and create items in media table when adding a backlog.
+- corrected javadoc
+- got filter in dashboard search to function with tv shows and movies
+- created a mediaDetails page to get more info on media
+
+Week 9
 Indie project:
+- trying to get cognito sign in redirect to work 
