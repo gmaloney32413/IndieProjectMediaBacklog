@@ -30,43 +30,49 @@ public class BacklogServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // TODO: Replace with actual logged-in user ID from session
-        Long userId = (long)1;
-        User user = new User();
-        user.setId(userId);
+
+        try {
+            // TODO: Replace with actual logged-in user ID from session
+            Long userId = (long) 1;
+            User user = new User();
+            user.setId(userId);
 
 
-        //HttpSession session = request.getSession(false);
+            //HttpSession session = request.getSession(false);
 
-        /*
-        // Redirect if not logged in
-        if (session == null || session.getAttribute("user") == null) {
-            response.sendRedirect("logIn"); // adjust if your login path is different
-            return;
+            /*
+            // Redirect if not logged in
+            if (session == null || session.getAttribute("user") == null) {
+                response.sendRedirect("logIn"); // adjust if your login path is different
+                return;
+            }
+
+            User user = (User) session.getAttribute("user");
+            Long userId = user.getId();
+
+             */
+
+            List<BacklogEntry> backlogEntries = backlogDao.getAll();
+
+            // Get search query
+            String searchQuery = request.getParameter("searchQuery");
+
+            if (searchQuery != null && !searchQuery.isBlank()) {
+                backlogEntries = backlogEntries.stream()
+                        .filter(entry -> entry.getMediaItem().getTitle()
+                                .toLowerCase()
+                                .contains(searchQuery.toLowerCase()))
+                        .collect(Collectors.toList());
+            }
+
+            // Add the list to the request
+            request.setAttribute("backlogEntries", backlogEntries);
+
+            // Forward to JSP
+            request.getRequestDispatcher("/backlog.jsp").forward(request, response);
+        }catch (Exception e) {
+            e.printStackTrace();   // FORCE visibility
+            throw new ServletException(e);
         }
-
-        User user = (User) session.getAttribute("user");
-        Long userId = user.getId();
-
-         */
-
-        List<BacklogEntry> backlogEntries = backlogDao.getByPropertyEqual("user", user);
-
-        // Get search query
-        String searchQuery = request.getParameter("searchQuery");
-
-        if (searchQuery != null && !searchQuery.isBlank()) {
-            backlogEntries = backlogEntries.stream()
-                    .filter(entry -> entry.getMediaItem().getTitle()
-                            .toLowerCase()
-                            .contains(searchQuery.toLowerCase()))
-                    .collect(Collectors.toList());
-        }
-
-        // Add the list to the request
-        request.setAttribute("backlogEntries", backlogEntries);
-
-        // Forward to JSP
-        request.getRequestDispatcher("/backlog.jsp").forward(request, response);
     }
 }

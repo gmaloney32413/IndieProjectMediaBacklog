@@ -35,91 +35,97 @@ public class DashboardServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        Long userId = 1L; // hardcoded for now (until Cognito)
+        try {
 
-        GenericDao<User> userDao = new GenericDao<>(User.class);
-        User currentUser = userDao.getById(userId);
-        // Get search parameters (if present)
-        String searchQuery = request.getParameter("searchQuery");
-        String searchType = request.getParameter("searchType");
+            Long userId = 1L; // hardcoded for now (until Cognito)
 
-        logger.debug("Search parameters received - query: " + searchQuery + ", type: " + searchType);
-        List<MediaItem> mediaItems = new ArrayList<>();
-        MediaConverter converter = new MediaConverter();
-        TMDBDao tmdbDao = new TMDBDao();
+            GenericDao<User> userDao = new GenericDao<>(User.class);
+            User currentUser = userDao.getById(userId);
+            // Get search parameters (if present)
+            String searchQuery = request.getParameter("searchQuery");
+            String searchType = request.getParameter("searchType");
 
-        if (searchQuery != null && !searchQuery.isBlank()) {
-            if (searchType == null) searchType = "any";
-            switch (searchType.toLowerCase()) {
-                case "movie":
-                    // searchMovies returns List<MovieItem>
-                    List<MovieItem> movieResults = tmdbDao.searchMovies(searchQuery);
-                    for (MovieItem item : movieResults) {
-                        Movie movie = converter.convertToMovie(item);
-                        mediaItems.add(movie);
-                    }
-                    break;
+            logger.debug("Search parameters received - query: " + searchQuery + ", type: " + searchType);
+            List<MediaItem> mediaItems = new ArrayList<>();
+            MediaConverter converter = new MediaConverter();
+            TMDBDao tmdbDao = new TMDBDao();
 
-                case "tv":
-                    // searchTv returns List<TVItem>
-                    List<TVItem> tvResults = tmdbDao.searchTv(searchQuery);
-                    for (TVItem item : tvResults) {
-                        TvShow show = converter.convertToTvShow(item);
-                        mediaItems.add(show);
-                    }
-                    break;
+            if (searchQuery != null && !searchQuery.isBlank()) {
+                if (searchType == null) searchType = "any";
+                switch (searchType.toLowerCase()) {
+                    case "movie":
+                        // searchMovies returns List<MovieItem>
+                        List<MovieItem> movieResults = tmdbDao.searchMovies(searchQuery);
+                        for (MovieItem item : movieResults) {
+                            Movie movie = converter.convertToMovie(item);
+                            mediaItems.add(movie);
+                        }
+                        break;
 
-                default:
-                    // generic search: combine movies and tv shows
-                    List<MovieItem> movies = tmdbDao.searchMovies(searchQuery);
-                    List<TVItem> tvShows = tmdbDao.searchTv(searchQuery);
+                    case "tv":
+                        // searchTv returns List<TVItem>
+                        List<TVItem> tvResults = tmdbDao.searchTv(searchQuery);
+                        for (TVItem item : tvResults) {
+                            TvShow show = converter.convertToTvShow(item);
+                            mediaItems.add(show);
+                        }
+                        break;
 
-                    movies.forEach(item -> mediaItems.add(converter.convertToMovie(item)));
-                    tvShows.forEach(item -> mediaItems.add(converter.convertToTvShow(item)));
+                    default:
+                        // generic search: combine movies and tv shows
+                        List<MovieItem> movies = tmdbDao.searchMovies(searchQuery);
+                        List<TVItem> tvShows = tmdbDao.searchTv(searchQuery);
 
-                    logger.debug("Media items size: " + mediaItems.size());
-                    mediaItems.forEach(m -> logger.debug("Item: " + m));
+                        movies.forEach(item -> mediaItems.add(converter.convertToMovie(item)));
+                        tvShows.forEach(item -> mediaItems.add(converter.convertToTvShow(item)));
 
-                    break;
+                        logger.debug("Media items size: " + mediaItems.size());
+                        mediaItems.forEach(m -> logger.debug("Item: " + m));
+
+                        break;
+                }
+            } else {
+                if (searchType == null) searchType = "any";
+
+                switch (searchType.toLowerCase()) {
+
+                    case "movie":
+                        tmdbDao.getMoviePage().getResults()
+                                .forEach(item -> mediaItems.add(converter.convertToMovie(item)));
+                        break;
+
+                    case "tv":
+                        tmdbDao.getTVPage().getResults()
+                                .forEach(item -> mediaItems.add(converter.convertToTvShow(item)));
+                        break;
+
+                    default:
+                        tmdbDao.getMoviePage().getResults()
+                                .forEach(item -> mediaItems.add(converter.convertToMovie(item)));
+
+                        tmdbDao.getTVPage().getResults()
+                                .forEach(item -> mediaItems.add(converter.convertToTvShow(item)));
+                        break;
+                }
             }
-        } else {
-            if (searchType == null) searchType = "any";
 
-            switch (searchType.toLowerCase()) {
 
-                case "movie":
-                    tmdbDao.getMoviePage().getResults()
-                            .forEach(item -> mediaItems.add(converter.convertToMovie(item)));
-                    break;
+            // Count backlog entries by status
+            Long plannedCount = backlogEntryDao.countByStatusForUser(currentUser, BacklogStatus.PLANNED);
+            Long inProgressCount = backlogEntryDao.countByStatusForUser(currentUser, BacklogStatus.IN_PROGRESS);
+            Long completedCount = backlogEntryDao.countByStatusForUser(currentUser, BacklogStatus.COMPLETED);
+            Long droppedCount = backlogEntryDao.countByStatusForUser(currentUser, BacklogStatus.DROPPED);
 
-                case "tv":
-                    tmdbDao.getTVPage().getResults()
-                            .forEach(item -> mediaItems.add(converter.convertToTvShow(item)));
-                    break;
+            request.setAttribute("plannedCount", plannedCount);
+            request.setAttribute("inProgressCount", inProgressCount);
+            request.setAttribute("completedCount", completedCount);
+            request.setAttribute("droppedCount", droppedCount);
 
-                default:
-                    tmdbDao.getMoviePage().getResults()
-                            .forEach(item -> mediaItems.add(converter.convertToMovie(item)));
-
-                    tmdbDao.getTVPage().getResults()
-                            .forEach(item -> mediaItems.add(converter.convertToTvShow(item)));
-                    break;
-            }
+            request.setAttribute("mediaItems", mediaItems);
+            request.getRequestDispatcher("/dashboard.jsp").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();   // FORCE visibility
+            throw new ServletException(e);
         }
-
-
-        // Count backlog entries by status
-        Long plannedCount = backlogEntryDao.countByStatusForUser(currentUser, BacklogStatus.PLANNED);
-        Long inProgressCount = backlogEntryDao.countByStatusForUser(currentUser, BacklogStatus.IN_PROGRESS);
-        Long completedCount = backlogEntryDao.countByStatusForUser(currentUser, BacklogStatus.COMPLETED);
-        Long droppedCount = backlogEntryDao.countByStatusForUser(currentUser, BacklogStatus.DROPPED);
-
-        request.setAttribute("plannedCount", plannedCount);
-        request.setAttribute("inProgressCount", inProgressCount);
-        request.setAttribute("completedCount", completedCount);
-        request.setAttribute("droppedCount", droppedCount);
-
-        request.setAttribute("mediaItems", mediaItems);
-        request.getRequestDispatcher("/dashboard.jsp").forward(request, response);
     }
 }

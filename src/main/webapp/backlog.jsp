@@ -18,7 +18,7 @@
 <main>
     <h1>My Media Backlog</h1>
 
-    <p>BacklogEntries size: ${backlogEntries.size()}</p>
+    <p>BacklogEntries size: ${empty backlogEntries ? 0 : backlogEntries.size()}</p>
 
     <section id="search-backlog">
         <h2>Search My Backlog</h2>
