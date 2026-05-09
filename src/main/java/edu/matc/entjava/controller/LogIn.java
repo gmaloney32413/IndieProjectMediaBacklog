@@ -31,12 +31,26 @@ public class LogIn extends HttpServlet implements PropertiesLoader {
     @Override
     public void init() throws ServletException {
         super.init();
-        ServletContext context = getServletContext();
-        CLIENT_ID = context.getAttribute("CLIENT_ID").toString();
-        LOGIN_URL = context.getAttribute("LOGIN_URL").toString();
-        REDIRECT_URL = context.getAttribute("REDIRECT_URL").toString();
 
+        try {
+            logger.info("Loading properties...");
+            properties = loadProperties("/cognito.properties");
+            logger.info("Properties loaded = " + (properties != null));
 
+            if (properties == null) {
+                throw new ServletException("cognito.properties not found");
+            }
+
+            CLIENT_ID = properties.getProperty("CLIENT_ID");
+            LOGIN_URL = properties.getProperty("LOGIN_URL");
+            REDIRECT_URL = properties.getProperty("REDIRECT_URL");
+
+            logger.info("Login servlet initialized successfully");
+
+        } catch (Exception e) {
+            logger.error("Failed to load cognito.properties", e);
+            throw new ServletException(e);
+        }
     }
 
 

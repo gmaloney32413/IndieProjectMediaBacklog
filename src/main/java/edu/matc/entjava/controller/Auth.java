@@ -69,24 +69,30 @@ public class Auth extends HttpServlet implements PropertiesLoader {
     @Override
     public void init() throws ServletException {
         super.init();
-        ServletContext context = getServletContext();
 
-        CLIENT_ID = (String) context.getAttribute("CLIENT_ID");
-        CLIENT_SECRET = (String) context.getAttribute("CLIENT_SECRET");
-        OAUTH_URL = (String) context.getAttribute("OAUTH_URL");
-        LOGIN_URL = (String) context.getAttribute("LOGIN_URL");
-        REDIRECT_URL = (String) context.getAttribute("REDIRECT_URL");
-        REGION = (String) context.getAttribute("REGION");
-        POOL_ID = (String) context.getAttribute("POOL_ID");
+        try {
+            Properties properties = loadProperties("/cognito.properties");
 
-        // DEBUG log
-        logger.info("Cognito config: CLIENT_ID=" + CLIENT_ID + ", REGION=" + REGION + ", POOL_ID=" + POOL_ID);
+            CLIENT_ID = properties.getProperty("CLIENT_ID");
+            CLIENT_SECRET = properties.getProperty("CLIENT_SECRET");
+            OAUTH_URL = properties.getProperty("OAUTH_URL");
+            LOGIN_URL = properties.getProperty("LOGIN_URL");
+            REDIRECT_URL = properties.getProperty("REDIRECT_URL");
+            REGION = properties.getProperty("REGION");
+            POOL_ID = properties.getProperty("POOL_ID");
 
-        if (CLIENT_ID == null || CLIENT_SECRET == null || REGION == null || POOL_ID == null) {
-            throw new ServletException("Cognito properties not initialized correctly.");
+            logger.info("Cognito config loaded successfully");
+
+            if (CLIENT_ID == null || CLIENT_SECRET == null || REGION == null || POOL_ID == null) {
+                throw new ServletException("Missing Cognito config values");
+            }
+
+            loadKey();
+
+        } catch (Exception e) {
+            logger.error("Auth init failed", e);
+            throw new ServletException(e);
         }
-
-        loadKey();
     }
 
     /**
@@ -98,9 +104,15 @@ public class Auth extends HttpServlet implements PropertiesLoader {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         String authCode = req.getParameter("code");
         logger.info("Auth code received: " + (authCode != null));
         String userName = null;
+
+        logger.info("FULL QUERY STRING: " + req.getQueryString());
+        logger.info("AUTH CODE: " + req.getParameter("code"));
+        logger.info("ERROR: " + req.getParameter("error"));
+        logger.info("ERROR DESC: " + req.getParameter("error_description"));
 
         if (authCode == null) {
             //TODO forward to an error page or back to the login
