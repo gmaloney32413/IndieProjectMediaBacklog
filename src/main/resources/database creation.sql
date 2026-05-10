@@ -1,0 +1,77 @@
+    DROP TABLE IF EXISTS backlog_entries;
+    DROP TABLE IF EXISTS movies;
+    DROP TABLE IF EXISTS tv_shows;
+    DROP TABLE IF EXISTS videogames;
+    DROP TABLE IF EXISTS media_items;
+    DROP TABLE IF EXISTS users;
+
+    -- Table: users
+    CREATE TABLE users (
+        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+        cognito_sub VARCHAR(255) NOT NULL UNIQUE,
+        email VARCHAR(255) NOT NULL,
+        username VARCHAR(100),
+        name VARCHAR(255)
+    );
+
+    -- Table: media_items
+    CREATE TABLE media_items (
+        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+        tmdb_id BIGINT NOT NULL,
+        title VARCHAR(255) NOT NULL,
+        overview TEXT,
+        media_type VARCHAR(50),
+        release_date DATE,
+        poster_url VARCHAR(500)
+    );
+
+    -- Table: movies (JOINED inheritance)
+    CREATE TABLE movies (
+        id BIGINT PRIMARY KEY,
+        runtime INT,
+        director VARCHAR(255),
+        rating VARCHAR(50),
+        CONSTRAINT fk_movies_media FOREIGN KEY (id) REFERENCES media_items(id)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE
+    );
+
+    -- Table: tv_shows (JOINED inheritance)
+    CREATE TABLE tv_shows (
+        id BIGINT PRIMARY KEY,
+        number_of_seasons INT,
+        total_episodes INT,
+        ongoing BOOLEAN,
+        CONSTRAINT fk_tvshows_media FOREIGN KEY (id) REFERENCES media_items(id)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE
+    );
+
+    -- Table: videogames (JOINED inheritance)
+    CREATE TABLE videogames (
+        id BIGINT PRIMARY KEY,
+        platform VARCHAR(100),
+        developer VARCHAR(255),
+        publisher VARCHAR(255),
+        esrb_rating VARCHAR(50),
+        CONSTRAINT fk_videogames_media FOREIGN KEY (id) REFERENCES media_items(id)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE
+    );
+
+    -- Table: backlog_entries
+    CREATE TABLE backlog_entries (
+        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+        user_id BIGINT NOT NULL,
+        media_id BIGINT NOT NULL,
+        status VARCHAR(50) NOT NULL,
+        notes TEXT,
+        user_rating INT,
+        date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        CONSTRAINT fk_backlog_user FOREIGN KEY (user_id) REFERENCES users(id)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE,
+        CONSTRAINT fk_backlog_media FOREIGN KEY (media_id) REFERENCES media_items(id)
+            ON DELETE CASCADE
+            ON UPDATE CASCADE
+    );

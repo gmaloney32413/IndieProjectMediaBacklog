@@ -105,6 +105,14 @@ public class Auth extends HttpServlet implements PropertiesLoader {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        String error = req.getParameter("error");
+        if (error != null) {
+            logger.error("Cognito login failed: " + error + " - " + req.getParameter("error_description"));
+            req.setAttribute("errorMessage", error);
+            req.getRequestDispatcher("authError.jsp").forward(req, resp);
+            return;
+        }
+
         String authCode = req.getParameter("code");
         logger.info("Auth code received: " + (authCode != null));
         String userName = null;
@@ -160,6 +168,9 @@ public class Auth extends HttpServlet implements PropertiesLoader {
         HttpResponse<?> response = null;
 
         response = client.send(authRequest, HttpResponse.BodyHandlers.ofString());
+
+        logger.error("TOKEN STATUS: " + response.statusCode());
+        logger.error("TOKEN BODY: " + response.body());
 
 
         logger.debug("Response headers: " + response.headers().toString());
@@ -224,6 +235,10 @@ public class Auth extends HttpServlet implements PropertiesLoader {
         String email = jwt.getClaim("email").asString();
         String username = jwt.getClaim("cognito:username").asString(); // optional
         String name = jwt.getClaim("name").asString(); // optional
+
+        logger.info("EMAIL: " + email);
+        logger.info("USERNAME: " + username);
+        logger.info("NAME: " + name);
 
         // Get or create user in the database
         GenericDao<User> userDao = new GenericDao<>(User.class);

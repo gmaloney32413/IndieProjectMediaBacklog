@@ -69,7 +69,11 @@ public class LogIn extends HttpServlet implements PropertiesLoader {
             RequestDispatcher rd = req.getRequestDispatcher("authError.jsp");
             rd.forward(req, resp);
         } else{
-            String url = LOGIN_URL + "?response_type=code&client_id=" + CLIENT_ID + "&redirect_uri=" + REDIRECT_URL;
+            String url = LOGIN_URL
+                    + "?response_type=code"
+                    + "&client_id=" + CLIENT_ID
+                    + "&redirect_uri=" + REDIRECT_URL
+                    + "&scope=openid+email+profile";
             resp.sendRedirect(url);
         }
     }
