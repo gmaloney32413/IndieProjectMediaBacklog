@@ -18,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet("/editBacklog")
@@ -41,7 +42,14 @@ public class EditBacklogServlet extends HttpServlet {
                          HttpServletResponse response)
             throws ServletException, IOException {
 
-        final long currentUserId = 1L;
+        HttpSession session = request.getSession(false);
+
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect("logIn");
+            return;
+        }
+
+        User currentUser = (User) session.getAttribute("user");
 
         String entryIdParam = request.getParameter("entryId");
         BacklogEntry entry = null;
@@ -84,7 +92,8 @@ public class EditBacklogServlet extends HttpServlet {
                 return;
             }
 
-            User currentUser = userDao.getById(currentUserId);
+
+            User user = (User) session.getAttribute("user");
             entry = new BacklogEntry();
             entry.setMediaItem(mediaItem);
             entry.setStatus(BacklogStatus.PLANNED);
@@ -165,7 +174,14 @@ public class EditBacklogServlet extends HttpServlet {
             }
         }
 
-        User user = userDao.getById(1L);
+        HttpSession session = request.getSession(false);
+
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect("logIn");
+            return;
+        }
+
+        User user = (User) session.getAttribute("user");
         if (user == null) throw new ServletException("User not found");
 
         BacklogEntry entry;

@@ -16,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +38,15 @@ public class DashboardServlet extends HttpServlet {
 
         try {
 
-            Long userId = 1L; // hardcoded for now (until Cognito)
+            HttpSession session = request.getSession(false);
 
-            GenericDao<User> userDao = new GenericDao<>(User.class);
-            User currentUser = userDao.getById(userId);
+            if (session == null || session.getAttribute("user") == null) {
+                response.sendRedirect("logIn");
+                return;
+            }
+
+            User currentUser = (User) session.getAttribute("user");
+
             // Get search parameters (if present)
             String searchQuery = request.getParameter("searchQuery");
             String searchType = request.getParameter("searchType");

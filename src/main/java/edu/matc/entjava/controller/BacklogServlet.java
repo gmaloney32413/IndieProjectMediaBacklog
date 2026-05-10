@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,9 +34,15 @@ public class BacklogServlet extends HttpServlet {
 
         try {
             // TODO: Replace with actual logged-in user ID from session
-            Long userId = (long) 1;
-            User user = new User();
-            user.setId(userId);
+            HttpSession session = request.getSession(false);
+
+            if (session == null || session.getAttribute("user") == null) {
+                response.sendRedirect("logIn");
+                return;
+            }
+
+            User user = (User) session.getAttribute("user");
+            Long userId = user.getId();
 
 
             //HttpSession session = request.getSession(false);
@@ -52,7 +59,11 @@ public class BacklogServlet extends HttpServlet {
 
              */
 
-            List<BacklogEntry> backlogEntries = backlogDao.getAll();
+            List<BacklogEntry> backlogEntries = backlogDao.getAll()
+                    .stream()
+                    .filter(entry -> entry.getUser() != null
+                            && entry.getUser().getId().equals(userId))
+                    .collect(Collectors.toList());
 
             // Get search query
             String searchQuery = request.getParameter("searchQuery");
