@@ -4,11 +4,18 @@ import edu.matc.entjava.entity.Movie;
 import edu.matc.entjava.entity.TvShow;
 import edu.matc.entjava.org.themoviedb.MovieItem;
 import edu.matc.entjava.org.themoviedb.TVItem;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  * The type Media converter.
  */
 public class MediaConverter {
+
+    private final Logger logger = LogManager.getLogger(this.getClass());
 
     /**
      * Convert to tv show tv show.
@@ -49,9 +56,12 @@ public class MediaConverter {
         movie.setOverview(item.getOverview());
         movie.setPosterUrl(item.getPosterPath() != null ? "https://image.tmdb.org/t/p/w500" + item.getPosterPath() : null);
 
-        if (item.getReleaseDate() != null && !item.getReleaseDate().isEmpty()) {
-            movie.setReleaseDate(java.sql.Date.valueOf(item.getReleaseDate()));
+        if (item.getReleaseDate() != null && !item.getReleaseDate().isBlank()) {
+            LocalDate localDate = LocalDate.parse(item.getReleaseDate());
+            movie.setReleaseDate(java.sql.Date.valueOf(localDate));
         }
+        logger.debug("TMDB release_date raw: " + item.getReleaseDate());
+        logger.debug("Converted releaseDate: " + movie.getReleaseDate());
 
         movie.setRuntime(item.getRuntime());   // Requires /movie/{id} API call
         movie.setDirector(item.getDirector());  // Requires credits API

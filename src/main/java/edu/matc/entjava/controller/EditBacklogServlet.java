@@ -211,7 +211,17 @@ public class EditBacklogServlet extends HttpServlet {
         if (entryIdParam != null && !entryIdParam.isEmpty()) {
             backlogEntryDao.update(entry);
         } else {
-            backlogEntryDao.insert(entry);
+            BacklogEntry existing =
+                    backlogEntryDao.getByUserAndMedia(user, mediaItem);
+
+            if (existing == null) {
+
+                backlogEntryDao.insert(entry);
+
+            } else {
+
+                // already exists
+            }
         }
 
         response.sendRedirect("backlog");

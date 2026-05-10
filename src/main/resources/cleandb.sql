@@ -1,1 +1,89 @@
-SET FOREIGN_KEY_CHECKS = 0; TRUNCATE TABLE backlog_entries; TRUNCATE TABLE movies; TRUNCATE TABLE tv_shows; TRUNCATE TABLE media_items; TRUNCATE TABLE users; SET FOREIGN_KEY_CHECKS = 1; ALTER TABLE users AUTO_INCREMENT = 1; ALTER TABLE media_items AUTO_INCREMENT = 1; ALTER TABLE movies AUTO_INCREMENT = 1; ALTER TABLE tv_shows AUTO_INCREMENT = 1;
+SET FOREIGN_KEY_CHECKS = 0;
+
+DROP TABLE IF EXISTS backlog_entries;
+DROP TABLE IF EXISTS movies;
+DROP TABLE IF EXISTS tv_shows;
+DROP TABLE IF EXISTS videogames;
+DROP TABLE IF EXISTS media_items;
+DROP TABLE IF EXISTS users;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- USERS
+CREATE TABLE users (
+                       id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                       cognito_sub VARCHAR(255) NOT NULL UNIQUE,
+                       email VARCHAR(255) NOT NULL,
+                       username VARCHAR(100),
+                       name VARCHAR(255)
+);
+
+-- MEDIA
+CREATE TABLE media_items (
+                             id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                             tmdb_id BIGINT NOT NULL,
+                             title VARCHAR(255) NOT NULL,
+                             overview TEXT,
+                             media_type VARCHAR(50),
+                             release_date DATE,
+                             poster_url VARCHAR(500)
+);
+
+-- MOVIES
+CREATE TABLE movies (
+                        id BIGINT PRIMARY KEY,
+                        runtime INT,
+                        director VARCHAR(255),
+                        rating VARCHAR(50),
+                        CONSTRAINT fk_movies_media FOREIGN KEY (id)
+                            REFERENCES media_items(id)
+                            ON DELETE CASCADE
+                            ON UPDATE CASCADE
+);
+
+-- TV SHOWS
+CREATE TABLE tv_shows (
+                          id BIGINT PRIMARY KEY,
+                          number_of_seasons INT,
+                          total_episodes INT,
+                          ongoing BOOLEAN,
+                          CONSTRAINT fk_tvshows_media FOREIGN KEY (id)
+                              REFERENCES media_items(id)
+                              ON DELETE CASCADE
+                              ON UPDATE CASCADE
+);
+
+-- VIDEO GAMES
+CREATE TABLE videogames (
+                            id BIGINT PRIMARY KEY,
+                            platform VARCHAR(100),
+                            developer VARCHAR(255),
+                            publisher VARCHAR(255),
+                            esrb_rating VARCHAR(50),
+                            CONSTRAINT fk_videogames_media FOREIGN KEY (id)
+                                REFERENCES media_items(id)
+                                ON DELETE CASCADE
+                                ON UPDATE CASCADE
+);
+
+-- BACKLOG
+CREATE TABLE backlog_entries (
+                                 id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                 user_id BIGINT NOT NULL,
+                                 media_id BIGINT NOT NULL,
+                                 status VARCHAR(50) NOT NULL,
+                                 notes TEXT,
+                                 user_rating INT,
+                                 date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                 CONSTRAINT fk_backlog_user FOREIGN KEY (user_id)
+                                     REFERENCES users(id)
+                                     ON DELETE CASCADE
+                                     ON UPDATE CASCADE,
+                                 CONSTRAINT fk_backlog_media FOREIGN KEY (media_id)
+                                     REFERENCES media_items(id)
+                                     ON DELETE CASCADE
+                                     ON UPDATE CASCADE
+);
+
+ALTER TABLE backlog_entries
+    ADD CONSTRAINT uq_user_media UNIQUE (user_id, media_id);

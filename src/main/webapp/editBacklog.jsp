@@ -19,10 +19,6 @@
 </head>
 <body>
 
-<header>
-    <c:import url="/includes/navbar.jsp"/>
-</header>
-
 <main>
     <h1>
         <c:choose>

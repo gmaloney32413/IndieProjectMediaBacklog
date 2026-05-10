@@ -233,8 +233,13 @@ public class Auth extends HttpServlet implements PropertiesLoader {
         // Extract claims
         String cognitoSub = jwt.getClaim("sub").asString(); // unique Cognito ID
         String email = jwt.getClaim("email").asString();
-        String username = jwt.getClaim("cognito:username").asString(); // optional
-        String name = jwt.getClaim("name").asString(); // optional
+        String username = jwt.getClaim("cognito:username") != null
+                ? jwt.getClaim("cognito:username").asString()
+                : email;
+
+        String name = jwt.getClaim("name") != null
+                ? jwt.getClaim("name").asString()
+                : username;
 
         logger.info("EMAIL: " + email);
         logger.info("USERNAME: " + username);
@@ -243,21 +248,44 @@ public class Auth extends HttpServlet implements PropertiesLoader {
         // Get or create user in the database
         GenericDao<User> userDao = new GenericDao<>(User.class);
 
-        // Check if user already exists
+        // find user by Cognito sub
         List<User> users = userDao.getByPropertyEqual("cognitoSub", cognitoSub);
 
         User user;
 
         if (users.isEmpty()) {
+            // CREATE new user
             user = new User(null, cognitoSub, email, username, name);
             userDao.insert(user);
         } else {
+            // UPDATE existing user
             user = users.get(0);
+
+            boolean changed = false;
+
+            if (email != null && !email.equals(user.getEmail())) {
+                user.setEmail(email);
+                changed = true;
+            }
+
+            if (username != null && !username.equals(user.getUsername())) {
+                user.setUsername(username);
+                changed = true;
+            }
+
+            if (name != null && !name.equals(user.getName())) {
+                user.setName(name);
+                changed = true;
+            }
+
+            if (changed) {
+                userDao.update(user);
+            }
         }
 
         // Store user in session
         HttpSession session = req.getSession(true);
-        session.setAttribute("user", user);
+        session.setAttribute("user", userDao.getById(user.getId()));
 
         logger.debug("User logged in: " + user.getEmail() + ", CognitoSub: " + cognitoSub);
 

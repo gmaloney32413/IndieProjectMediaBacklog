@@ -71,13 +71,31 @@ public class GenericDao<T> {
      * @return the long
      */
     public Long insert(T entity) {
+
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
-        Long id = (Long) session.save(entity);
+        Long id = null;
 
-        transaction.commit();
-        session.close();
+        try {
+
+            id = (Long) session.save(entity);
+
+            transaction.commit();
+
+        } catch (Exception e) {
+
+            transaction.rollback();
+
+            logger.error("Insert failed", e);
+
+            throw e;
+
+        } finally {
+
+            session.close();
+        }
+
         return id;
     }
 

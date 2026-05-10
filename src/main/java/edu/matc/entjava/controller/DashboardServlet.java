@@ -63,7 +63,8 @@ public class DashboardServlet extends HttpServlet {
                         // searchMovies returns List<MovieItem>
                         List<MovieItem> movieResults = tmdbDao.searchMovies(searchQuery);
                         for (MovieItem item : movieResults) {
-                            Movie movie = converter.convertToMovie(item);
+                            MovieItem fullItem = tmdbDao.getMovieDetails(item.getId());
+                            Movie movie = converter.convertToMovie(fullItem);
                             mediaItems.add(movie);
                         }
                         break;

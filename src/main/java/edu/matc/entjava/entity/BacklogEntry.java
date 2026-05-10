@@ -8,7 +8,12 @@ import java.util.Date;
  * The type Backlog entry.
  */
 @Entity
-@Table(name = "backlog_entries")
+@Table(
+    name = "backlog_entries",
+    uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"user_id", "media_id"})
+    }
+)
 public class BacklogEntry {
 
     @Id

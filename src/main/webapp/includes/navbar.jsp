@@ -7,7 +7,6 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
 
@@ -15,7 +14,18 @@
             Media Backlog
         </a>
 
-        <div class="collapse navbar-collapse">
+        <!-- TOGGLER BUTTON (THIS IS WHAT YOU'RE MISSING) -->
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarContent"
+                aria-controls="navbarContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- COLLAPSIBLE CONTENT -->
+        <div class="collapse navbar-collapse" id="navbarContent">
 
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
@@ -34,10 +44,8 @@
 
             </ul>
 
-            <!-- RIGHT SIDE NAV -->
             <ul class="navbar-nav ms-auto">
 
-                <!-- NOT LOGGED IN -->
                 <c:if test="${empty sessionScope.user}">
                     <li class="nav-item">
                         <a class="nav-link" href="${pageContext.request.contextPath}/logIn">
@@ -46,7 +54,6 @@
                     </li>
                 </c:if>
 
-                <!-- LOGGED IN DROPDOWN -->
                 <c:if test="${not empty sessionScope.user}">
                     <li class="nav-item dropdown">
 
@@ -57,10 +64,7 @@
                            data-bs-toggle="dropdown"
                            aria-expanded="false">
 
-                            <!-- simple user icon -->
                             <span class="me-1">👤</span>
-
-                            <!-- optional: show username/email -->
                                 ${sessionScope.user.username}
                         </a>
 
@@ -68,15 +72,13 @@
                             aria-labelledby="userDropdown">
 
                             <li>
-                                <a class="dropdown-item"
-                                   href="${pageContext.request.contextPath}/account">
+                                <a class="dropdown-item" href="${pageContext.request.contextPath}/account">
                                     Account Info
                                 </a>
                             </li>
 
                             <li>
-                                <a class="dropdown-item"
-                                   href="${pageContext.request.contextPath}/settings">
+                                <a class="dropdown-item" href="${pageContext.request.contextPath}/settings">
                                     Settings
                                 </a>
                             </li>
@@ -84,8 +86,7 @@
                             <li><hr class="dropdown-divider"></li>
 
                             <li>
-                                <a class="dropdown-item text-danger"
-                                   href="${pageContext.request.contextPath}/logout">
+                                <a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/logout">
                                     Sign Out
                                 </a>
                             </li>
