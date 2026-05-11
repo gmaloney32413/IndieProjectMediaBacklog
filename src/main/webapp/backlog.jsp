@@ -17,6 +17,38 @@
 
     <p>BacklogEntries size: ${empty backlogEntries ? 0 : backlogEntries.size()}</p>
 
+    <!-- Backlog Status Table -->
+    <section id="backlog-status">
+        <h2>Backlog Status</h2>
+        <table border="1">
+            <thead>
+            <tr>
+                <th>Status</th>
+                <th>Count</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Planned</td>
+                <td id="planned-count">${plannedCount}</td>
+            </tr>
+            <tr>
+                <td>In Progress</td>
+                <td id="in-progress-count">${inProgressCount}</td>
+            </tr>
+            <tr>
+                <td>Completed</td>
+                <td id="completed-count">${completedCount}</td>
+            </tr>
+            <tr>
+                <td>Dropped</td>
+                <td id="dropped-count">${droppedCount}</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+    <br><br/>
+
     <section id="search-backlog">
         <h2>Search My Backlog</h2>
 

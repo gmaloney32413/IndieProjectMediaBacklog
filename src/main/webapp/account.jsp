@@ -34,6 +34,38 @@
 
     </div>
 
+    <hr>
+
+    <h3>Backlog Stats</h3>
+
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="card p-3">
+                <p><strong>Total Items:</strong> ${totalBacklog}</p>
+                <p><strong>Active:</strong> ${active}</p>
+                <p><strong>Completed:</strong> ${completed}</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card p-3">
+                <p><strong>Planned:</strong> ${planned}</p>
+                <p><strong>In Progress:</strong> ${inProgress}</p>
+                <p><strong>Dropped:</strong> ${dropped}</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card p-3">
+                <p><strong>Movies:</strong> ${movieCount}</p>
+                <p><strong>TV Shows:</strong> ${tvCount}</p>
+                <p><strong>Completion Rate:</strong> ${completionRate}%</p>
+            </div>
+        </div>
+
+    </div>
+
 </div>
 
 </body>

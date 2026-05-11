@@ -1,7 +1,9 @@
 package edu.matc.entjava.controller;
 
 import edu.matc.entjava.entity.BacklogEntry;
+import edu.matc.entjava.entity.BacklogStatus;
 import edu.matc.entjava.entity.User;
+import edu.matc.entjava.persistence.BacklogEntryDao;
 import edu.matc.entjava.persistence.GenericDao;
 
 import javax.servlet.ServletException;
@@ -20,11 +22,11 @@ import java.util.stream.Collectors;
 @WebServlet("/backlog")
 public class BacklogServlet extends HttpServlet {
 
-    private GenericDao<BacklogEntry> backlogDao;
+    private BacklogEntryDao backlogDao;
 
     @Override
     public void init() {
-        backlogDao = new GenericDao<>(BacklogEntry.class);
+        backlogDao = new BacklogEntryDao();
     }
 
     @Override
@@ -61,6 +63,17 @@ public class BacklogServlet extends HttpServlet {
                                 .contains(searchQuery.toLowerCase()))
                         .collect(Collectors.toList());
             }
+
+            // Count backlog entries by status
+            Long plannedCount = backlogDao.countByStatusForUser(user, BacklogStatus.PLANNED);
+            Long inProgressCount = backlogDao.countByStatusForUser(user, BacklogStatus.IN_PROGRESS);
+            Long completedCount = backlogDao.countByStatusForUser(user, BacklogStatus.COMPLETED);
+            Long droppedCount = backlogDao.countByStatusForUser(user, BacklogStatus.DROPPED);
+
+            request.setAttribute("plannedCount", plannedCount);
+            request.setAttribute("inProgressCount", inProgressCount);
+            request.setAttribute("completedCount", completedCount);
+            request.setAttribute("droppedCount", droppedCount);
 
             // Add the list to the request
             request.setAttribute("backlogEntries", backlogEntries);
