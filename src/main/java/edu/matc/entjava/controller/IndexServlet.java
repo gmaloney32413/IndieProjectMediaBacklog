@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The type Index servlet.
+ */
 @WebServlet("/index")
 public class IndexServlet extends HttpServlet {
     @Override

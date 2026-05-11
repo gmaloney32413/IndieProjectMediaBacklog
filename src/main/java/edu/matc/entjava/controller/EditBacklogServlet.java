@@ -21,6 +21,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * The type Edit backlog servlet.
+ */
 @WebServlet("/editBacklog")
 public class EditBacklogServlet extends HttpServlet {
 

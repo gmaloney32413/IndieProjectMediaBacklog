@@ -36,6 +36,14 @@
                 </c:when>
             </c:choose>
 
+            <c:if test="${not empty backlogEntry}">
+                <hr>
+                <h3>Your Backlog Info</h3>
+                <p><strong>Status:</strong> ${backlogEntry.status}</p>
+                <p><strong>Notes:</strong> ${backlogEntry.notes}</p>
+                <p><strong>Your Rating:</strong> ${backlogEntry.userRating}</p>
+            </c:if>
+
             <div class="back-link">
                 <c:choose>
                     <c:when test="${param.returnPage == 'backlog'}">

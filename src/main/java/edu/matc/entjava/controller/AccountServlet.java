@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * The type Account servlet.
+ */
 @WebServlet("/account")
 public class AccountServlet extends HttpServlet {
 
