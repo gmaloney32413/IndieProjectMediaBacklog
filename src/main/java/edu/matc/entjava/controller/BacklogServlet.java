@@ -45,20 +45,6 @@ public class BacklogServlet extends HttpServlet {
             Long userId = user.getId();
 
 
-            //HttpSession session = request.getSession(false);
-
-            /*
-            // Redirect if not logged in
-            if (session == null || session.getAttribute("user") == null) {
-                response.sendRedirect("logIn"); // adjust if your login path is different
-                return;
-            }
-
-            User user = (User) session.getAttribute("user");
-            Long userId = user.getId();
-
-             */
-
             List<BacklogEntry> backlogEntries = backlogDao.getAll()
                     .stream()
                     .filter(entry -> entry.getUser() != null

@@ -30,39 +30,51 @@
         </form>
     </section>
 
-    <table border="1" id="backlog-table">
-        <thead>
-        <tr>
-            <th>Poster</th>
-            <th>Title</th>
-            <th>Overview</th>
-            <th>Status</th>
-            <th>Notes</th>
-            <th>Personal Rating</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Media items will populate here dynamically -->
-        <c:forEach var="entry" items="${backlogEntries}">
-            <tr onclick="window.location.href='mediaDetails?tmdbId=${entry.mediaItem.tmdbId}&mediaType=${entry.mediaItem.mediaType}&returnPage=backlog'" style="cursor:pointer;">
-                <td>
-                    <c:if test="${not empty entry.mediaItem.posterUrl}">
-                        <img class="poster-img" src="${entry.mediaItem.posterUrl}" alt="${entry.mediaItem.title}" >
-                    </c:if>
-                </td>
-                <td>${entry.mediaItem.title}</td>
-                <td>${entry.mediaItem.overview}</td>
-                <td>${entry.status}</td>
-                <td>${entry.notes}</td>
-                <td>${entry.userRating}</td>
-                <td>
-                    <a href="editBacklog?entryId=${entry.id}">Edit</a>
-                </td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
+    <c:choose>
+        <c:when test="${empty backlogEntries}">
+            <div class="alert alert-info">
+                Backlog is empty. Go to the dashboard to add media to your backlog.
+                <a href="dashboard?searchQuery=" class="btn btn-primary">
+                    Go to Dashboard
+                </a>
+            </div>
+        </c:when>
+
+        <c:otherwise>
+            <table border="1" id="backlog-table">
+                <thead>
+                <tr>
+                    <th>Poster</th>
+                    <th>Title</th>
+                    <th>Overview</th>
+                    <th>Status</th>
+                    <th>Notes</th>
+                    <th>Personal Rating</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach var="entry" items="${backlogEntries}">
+                    <tr onclick="window.location.href='mediaDetails?tmdbId=${entry.mediaItem.tmdbId}&mediaType=${entry.mediaItem.mediaType}&returnPage=backlog'" style="cursor:pointer;">
+                        <td>
+                            <c:if test="${not empty entry.mediaItem.posterUrl}">
+                                <img class="poster-img" src="${entry.mediaItem.posterUrl}" alt="${entry.mediaItem.title}">
+                            </c:if>
+                        </td>
+                        <td>${entry.mediaItem.title}</td>
+                        <td>${entry.mediaItem.overview}</td>
+                        <td>${entry.status}</td>
+                        <td>${entry.notes}</td>
+                        <td>${entry.userRating}</td>
+                        <td>
+                            <a href="editBacklog?entryId=${entry.id}">Edit</a>
+                        </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </c:otherwise>
+    </c:choose>
 </main>
 <c:import url="/includes/footer.jsp"/>
 </body>

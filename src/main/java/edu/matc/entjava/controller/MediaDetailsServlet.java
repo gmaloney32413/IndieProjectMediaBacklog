@@ -5,16 +5,21 @@ import edu.matc.entjava.entity.Movie;
 import edu.matc.entjava.entity.TvShow;
 import edu.matc.entjava.org.themoviedb.MovieItem;
 import edu.matc.entjava.org.themoviedb.TVItem;
+import edu.matc.entjava.persistence.GenericDao;
 import edu.matc.entjava.persistence.MediaItemDao;
 import edu.matc.entjava.persistence.TMDBDao;
 
+import edu.matc.entjava.entity.BacklogEntry;
+import edu.matc.entjava.entity.User;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The type Media details servlet.
@@ -28,23 +33,36 @@ public class MediaDetailsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        HttpSession session = request.getSession(false);
+        User user = null;
+
+        if (session != null) {
+            user = (User) session.getAttribute("user");
+        }
+
         String tmdbIdParam = request.getParameter("tmdbId");
         String mediaType = request.getParameter("mediaType");
         String returnPage = request.getParameter("returnPage");
 
         MediaItem mediaItem = null;
+        BacklogEntry backlogEntry = null;   // ✅ MOVE THIS HERE (important)
 
-        if (tmdbIdParam != null && !tmdbIdParam.isEmpty()) {
+        final Long tmdbId = (tmdbIdParam != null && !tmdbIdParam.isEmpty())
+                ? Long.parseLong(tmdbIdParam)
+                : null;
 
-            Long tmdbId = Long.parseLong(tmdbIdParam);
+        final User currentUser = user;
 
-            // Try DB first
+        // -----------------------------
+        // 1. LOAD MEDIA ITEM
+        // -----------------------------
+        if (tmdbId != null) {
+
             mediaItem = mediaItemDao.getByPropertyEqual("tmdbId", tmdbId)
                     .stream()
                     .findFirst()
                     .orElse(null);
 
-            // If not found, fetch from TMDB
             if (mediaItem == null) {
 
                 if ("movie".equalsIgnoreCase(mediaType)) {
@@ -56,8 +74,9 @@ public class MediaDetailsServlet extends HttpServlet {
                         movie.setTmdbId(tmdbId);
                         movie.setTitle(movieItem.getTitle());
                         movie.setOverview(movieItem.getOverview());
-                        movie.setPosterUrl(movieItem.getPosterPath() != null ?
-                                "https://image.tmdb.org/t/p/w500" + movieItem.getPosterPath() : null);
+                        movie.setPosterUrl(movieItem.getPosterPath() != null
+                                ? "https://image.tmdb.org/t/p/w500" + movieItem.getPosterPath()
+                                : null);
 
                         movie.setRuntime(movieItem.getRuntime());
                         movie.setDirector(movieItem.getDirector());
@@ -75,8 +94,9 @@ public class MediaDetailsServlet extends HttpServlet {
                         show.setTmdbId(tmdbId);
                         show.setTitle(tvItem.getName());
                         show.setOverview(tvItem.getOverview());
-                        show.setPosterUrl(tvItem.getPosterPath() != null ?
-                                "https://image.tmdb.org/t/p/w500" + tvItem.getPosterPath() : null);
+                        show.setPosterUrl(tvItem.getPosterPath() != null
+                                ? "https://image.tmdb.org/t/p/w500" + tvItem.getPosterPath()
+                                : null);
 
                         show.setNumberOfSeasons(tvItem.getNumberOfSeasons());
                         show.setTotalEpisodes(tvItem.getTotalEpisodes());
@@ -88,7 +108,32 @@ public class MediaDetailsServlet extends HttpServlet {
             }
         }
 
+        // -----------------------------
+        // 2. LOAD BACKLOG ENTRY (IMPORTANT FIX)
+        // -----------------------------
+        if (currentUser != null && tmdbId != null) {
+
+            List<BacklogEntry> matches = new GenericDao<>(BacklogEntry.class)
+                    .getAll()
+                    .stream()
+                    .filter(be ->
+                            be.getUser() != null &&
+                                    be.getUser().getId().equals(currentUser.getId()) &&
+                                    be.getMediaItem() != null &&
+                                    be.getMediaItem().getTmdbId().equals(tmdbId)
+                    )
+                    .collect(Collectors.toList());
+
+            if (!matches.isEmpty()) {
+                backlogEntry = matches.get(0);
+            }
+        }
+
+        // -----------------------------
+        // 3. SEND TO JSP
+        // -----------------------------
         request.setAttribute("mediaItem", mediaItem);
+        request.setAttribute("backlogEntry", backlogEntry);
         request.setAttribute("returnPage", returnPage);
 
         request.getRequestDispatcher("/mediaDetails.jsp")
