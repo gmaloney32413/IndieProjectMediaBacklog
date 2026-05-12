@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * The type Keys.
  */
-public class Keys {
+public class  Keys {
 
 	@JsonProperty("keys")
 	private List<KeysItem> keys;

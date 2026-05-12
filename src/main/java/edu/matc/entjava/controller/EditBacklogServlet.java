@@ -12,6 +12,8 @@ import edu.matc.entjava.persistence.MediaItemDao;
 import edu.matc.entjava.org.themoviedb.MovieItem;
 import edu.matc.entjava.org.themoviedb.TVItem;
 import edu.matc.entjava.persistence.TMDBDao;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,6 +33,7 @@ public class EditBacklogServlet extends HttpServlet {
     private MediaItemDao mediaItemDao;
     private GenericDao<User> userDao;
     private TMDBDao tmdbDao; // added TMDB DAO
+    private final Logger logger = LogManager.getLogger(this.getClass());
 
     @Override
     public void init() {
@@ -170,7 +173,7 @@ public class EditBacklogServlet extends HttpServlet {
                     }
                 } catch (Exception e) {
                     // log and continue without extra fields
-                    e.printStackTrace();
+                    logger.error(e);
                 }
 
                 mediaItemDao.insert(mediaItem);

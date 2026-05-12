@@ -45,6 +45,7 @@
             </tbody>
         </table>
     </section>
+    <br><br/>
 
     <!-- Search TMDB -->
     <section id="search-section">
@@ -100,6 +101,20 @@
                 </c:forEach>
                 </tbody>
             </table>
+        </div>
+
+        <div class="pagination">
+            <c:if test="${page > 1}">
+                <a href="dashboard?searchQuery=${param.searchQuery}&searchType=${param.searchType}&page=${page - 1}">
+                    Previous
+                </a>
+            </c:if>
+
+            <span>Page ${page}</span>
+
+            <a href="dashboard?searchQuery=${param.searchQuery}&searchType=${param.searchType}&page=${page + 1}">
+                Next
+            </a>
         </div>
     </section>
 </main>

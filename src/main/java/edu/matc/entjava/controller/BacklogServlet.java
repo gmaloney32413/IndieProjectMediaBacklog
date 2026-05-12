@@ -5,6 +5,8 @@ import edu.matc.entjava.entity.BacklogStatus;
 import edu.matc.entjava.entity.User;
 import edu.matc.entjava.persistence.BacklogEntryDao;
 import edu.matc.entjava.persistence.GenericDao;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 public class BacklogServlet extends HttpServlet {
 
     private BacklogEntryDao backlogDao;
+    private final Logger logger = LogManager.getLogger(this.getClass());
 
     @Override
     public void init() {
@@ -81,7 +84,7 @@ public class BacklogServlet extends HttpServlet {
             // Forward to JSP
             request.getRequestDispatcher("/backlog.jsp").forward(request, response);
         }catch (Exception e) {
-            e.printStackTrace();   // FORCE visibility
+            logger.error("Error loading backlog" +e); // FORCE visibility
             throw new ServletException(e);
         }
     }

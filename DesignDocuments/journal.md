@@ -2,6 +2,8 @@ Week 3
 
 Indie Project:
 - Worked on design documents: 1 hours
+- Began outlining media backlog concept and possible stretch goals 
+- Started creating design documentation and entity planning
 
 Week 4
 
@@ -72,12 +74,32 @@ Indie Project: 5
 
 
 Week 14:
-Indie Project: 4
+Indie Project: 6
 - Finished account/settings page functionality 
-- Added support for displaying Cognito user information in application UI
+- Added support for displaying Cognito user information in application UI 
 - Worked on syncing authenticated user data with local database records 
 - Improved overall UI consistency across navigation, dashboard, and backlog pages 
 - Refactored backlog editing and media display logic 
 - Performed testing/debugging for authentication and database interactions 
-- Cleaned up project structure and reviewed deployment configuration for Elastic Beanstalk
+- Cleaned up project structure and reviewed deployment configuration for Elastic Beanstalk 
+- Expanded JUnit testing coverage for DAO and TMDB functionality
+
+Week 15
+
+Indie Project: 8 hours
+
+- Finalized application functionality and completed MVP features 
+- Added additional TMDB DAO tests:
+  - pagination testing 
+  - invalid ID testing 
+  - search validation 
+  - detail endpoint validation
+- Reviewed project against final rubric requirements 
+- Removed remaining debugging statements and improved logging consistency 
+- Worked on backend validation improvements for forms and user input 
+- Reviewed Hibernate entity relationships and cascade behavior 
+- Performed final AWS deployment verification and application testing 
+- Refined UI styling using Bootstrap components and layout improvements 
+- Prepared project for final presentation and portfolio use 
+- Reviewed GitHub commit history and cleaned repository organization
 

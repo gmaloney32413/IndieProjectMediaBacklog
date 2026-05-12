@@ -3,6 +3,8 @@ package edu.matc.entjava.persistence;
 import edu.matc.entjava.org.themoviedb.MediaPage;
 import edu.matc.entjava.org.themoviedb.MovieItem;
 import edu.matc.entjava.org.themoviedb.TVItem;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,6 +21,7 @@ class TMDBDaoTest {
      * The Dao.
      */
     TMDBDao dao;
+    private final Logger logger = LogManager.getLogger(this.getClass());
 
     /**
      * Sets up.
@@ -114,7 +117,7 @@ class TMDBDaoTest {
      */
     @Test
     void searchTvReturnsResults() {
-        List<TVItem> results = dao.searchTv("one piece");
+        List<TVItem> results = dao.searchTv("one piece", 1);
         assertNotNull(results, "Results should not be null");
         assertFalse(results.isEmpty(), "Results should not be empty");
 
@@ -129,7 +132,7 @@ class TMDBDaoTest {
      */
     @Test
     void searchMoviesReturnsResults() {
-        List<MovieItem> results = dao.searchMovies("avengers");
+        List<MovieItem> results = dao.searchMovies("avengers", 1);
         assertNotNull(results, "Results should not be null");
         assertFalse(results.isEmpty(), "Results should not be empty");
 
@@ -229,5 +232,51 @@ class TMDBDaoTest {
         int invalidTvId = -1;
         TVItem tv = dao.getTVDetails(invalidTvId);
         assertNull(tv, "Invalid TV ID should return null");
+    }
+
+    /**
+     * Search movies pagination works.
+     */
+    @Test
+    void searchMoviesPaginationWorks() {
+
+        List<MovieItem> page1 = dao.searchMovies("avengers", 1);
+        List<MovieItem> page2 = dao.searchMovies("avengers", 2);
+
+        assertNotNull(page1);
+        assertNotNull(page2);
+
+        assertFalse(page1.isEmpty());
+        assertFalse(page2.isEmpty());
+
+        // Very important: pages should NOT be identical
+        assertNotEquals(page1.get(0).getId(), page2.get(0).getId(),
+                "Page 1 and Page 2 should return different results");
+    }
+
+    /**
+     * Search tv pagination works.
+     */
+    @Test
+    void searchTvPaginationWorks() {
+
+        List<TVItem> page1 = dao.searchTv("one piece", 1);
+        List<TVItem> page2 = dao.searchTv("one piece", 2);
+
+        assertNotNull(page1);
+        assertNotNull(page2);
+
+        assertFalse(page1.isEmpty(), "Page 1 should have results");
+
+        // Page 2 might be empty depending on API results
+        if (!page2.isEmpty()) {
+            assertNotEquals(
+                    page1.get(0).getId(),
+                    page2.get(0).getId(),
+                    "Pages should return different results when both have data"
+            );
+        } else {
+            logger.info("Page 2 is empty (TMDB only has 1 page of results for this query)");
+        }
     }
 }

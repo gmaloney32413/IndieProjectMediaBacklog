@@ -51,6 +51,9 @@ public class DashboardServlet extends HttpServlet {
             String searchQuery = request.getParameter("searchQuery");
             String searchType = request.getParameter("searchType");
 
+            String pageParam = request.getParameter("page");
+            int page = (pageParam != null) ? Integer.parseInt(pageParam) : 1;
+
             logger.debug("Search parameters received - query: " + searchQuery + ", type: " + searchType);
             List<MediaItem> mediaItems = new ArrayList<>();
             MediaConverter converter = new MediaConverter();
@@ -61,7 +64,7 @@ public class DashboardServlet extends HttpServlet {
                 switch (searchType.toLowerCase()) {
                     case "movie":
                         // searchMovies returns List<MovieItem>
-                        List<MovieItem> movieResults = tmdbDao.searchMovies(searchQuery);
+                        List<MovieItem> movieResults = tmdbDao.searchMovies(searchQuery, page);
                         for (MovieItem item : movieResults) {
                             MovieItem fullItem = tmdbDao.getMovieDetails(item.getId());
                             Movie movie = converter.convertToMovie(fullItem);
@@ -71,7 +74,7 @@ public class DashboardServlet extends HttpServlet {
 
                     case "tv":
                         // searchTv returns List<TVItem>
-                        List<TVItem> tvResults = tmdbDao.searchTv(searchQuery);
+                        List<TVItem> tvResults = tmdbDao.searchTv(searchQuery, page);
                         for (TVItem item : tvResults) {
                             TvShow show = converter.convertToTvShow(item);
                             mediaItems.add(show);
@@ -80,8 +83,8 @@ public class DashboardServlet extends HttpServlet {
 
                     default:
                         // generic search: combine movies and tv shows
-                        List<MovieItem> movies = tmdbDao.searchMovies(searchQuery);
-                        List<TVItem> tvShows = tmdbDao.searchTv(searchQuery);
+                        List<MovieItem> movies = tmdbDao.searchMovies(searchQuery, page);
+                        List<TVItem> tvShows = tmdbDao.searchTv(searchQuery, page);
 
                         movies.forEach(item -> mediaItems.add(converter.convertToMovie(item)));
                         tvShows.forEach(item -> mediaItems.add(converter.convertToTvShow(item)));
@@ -97,20 +100,20 @@ public class DashboardServlet extends HttpServlet {
                 switch (searchType.toLowerCase()) {
 
                     case "movie":
-                        tmdbDao.getMoviePage().getResults()
+                        tmdbDao.getMoviePage(page).getResults()
                                 .forEach(item -> mediaItems.add(converter.convertToMovie(item)));
                         break;
 
                     case "tv":
-                        tmdbDao.getTVPage().getResults()
+                        tmdbDao.getTVPage(page).getResults()
                                 .forEach(item -> mediaItems.add(converter.convertToTvShow(item)));
                         break;
 
                     default:
-                        tmdbDao.getMoviePage().getResults()
+                        tmdbDao.getMoviePage(page).getResults()
                                 .forEach(item -> mediaItems.add(converter.convertToMovie(item)));
 
-                        tmdbDao.getTVPage().getResults()
+                        tmdbDao.getTVPage(page).getResults()
                                 .forEach(item -> mediaItems.add(converter.convertToTvShow(item)));
                         break;
                 }
@@ -131,7 +134,7 @@ public class DashboardServlet extends HttpServlet {
             request.setAttribute("mediaItems", mediaItems);
             request.getRequestDispatcher("/dashboard.jsp").forward(request, response);
         } catch (Exception e) {
-            e.printStackTrace();   // FORCE visibility
+            logger.error("Error loading dashbaord" + e);  // FORCE visibility
             throw new ServletException(e);
         }
     }
